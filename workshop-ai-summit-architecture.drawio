@@ -1,0 +1,142 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="arch" name="Workshop AI Summit">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Workshop AI Summit — Arquitectura" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;fontSize=22;fontStyle=1;fontFamily=Inter;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="400" y="15" width="600" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_sources" value="Datos de Entrada" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#003545;opacity=10;strokeColor=#11567F;strokeWidth=1;dashed=0;verticalAlign=top;align=center;fontSize=14;fontStyle=1;fontFamily=Inter;fontColor=#11567F;" vertex="1" parent="1">
+          <mxGeometry x="30" y="70" width="180" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_github" value="GitHub Repo&#xa;(bootstrap.sql)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#F5F5F5;strokeColor=#666666;strokeWidth=1;dashed=1;fontColor=#333333;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="45" y="110" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_imagenes" value="Imágenes&#xa;(choque, cédula)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#F5F5F5;strokeColor=#666666;strokeWidth=1;dashed=1;fontColor=#333333;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="45" y="180" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_pdfs" value="Contratos PDF&#xa;(arrendamiento)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#F5F5F5;strokeColor=#666666;strokeWidth=1;dashed=1;fontColor=#333333;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="45" y="250" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_audio" value="Audio MP3&#xa;(llamadas clientes)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#F5F5F5;strokeColor=#666666;strokeWidth=1;dashed=1;fontColor=#333333;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="45" y="320" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_sinteticos" value="Datos Sintéticos&#xa;(Pólizas, Clientes)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#F5F5F5;strokeColor=#666666;strokeWidth=1;dashed=1;fontColor=#333333;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="45" y="390" width="150" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_processing" value="Cortex AI Functions" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#003545;opacity=10;strokeColor=#11567F;strokeWidth=1;dashed=0;verticalAlign=top;align=center;fontSize=14;fontStyle=1;fontFamily=Inter;fontColor=#11567F;" vertex="1" parent="1">
+          <mxGeometry x="270" y="70" width="220" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_ai_complete" value="AI_COMPLETE&#xa;(Multimodal)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#1B74E4;strokeColor=#0F4FA8;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="295" y="130" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_ai_parse" value="AI_PARSE_DOCUMENT" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#1B74E4;strokeColor=#0F4FA8;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="295" y="210" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_ai_transcribe" value="AI_TRANSCRIBE" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#1B74E4;strokeColor=#0F4FA8;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="295" y="290" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_ai_sentiment" value="AI_SENTIMENT" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#1B74E4;strokeColor=#0F4FA8;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="295" y="370" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_ai_extract" value="AI_EXTRACT" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#1B74E4;strokeColor=#0F4FA8;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="295" y="450" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_services" value="Servicios AI" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#003545;opacity=10;strokeColor=#11567F;strokeWidth=1;dashed=0;verticalAlign=top;align=center;fontSize=14;fontStyle=1;fontFamily=Inter;fontColor=#11567F;" vertex="1" parent="1">
+          <mxGeometry x="550" y="70" width="360" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_cortex_search" value="Cortex Search&#xa;(Embeddings + RAG)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="580" y="130" width="180" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_semantic_view" value="Cortex Analyst&#xa;(Semantic View SV_SEGUROS)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="580" y="220" width="180" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_agent" value="Snowflake Intelligence&#xa;Agent (AGENTE_SEGUROS_360)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FF9F36;strokeColor=#CC7F2E;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="580" y="320" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_tool_analyst" value="Tool: text_to_sql" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="590" y="400" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_tool_search" value="Tool: cortex_search" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="590" y="450" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_tool_chart" value="Tool: data_to_chart" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=1;fontColor=#FFFFFF;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="590" y="500" width="120" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_tables" value="Tablas Estructuradas&#xa;(POLIZAS, CLIENTES,&#xa;RECLAMACIONES)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=2;fontColor=#FFFFFF;fontSize=11;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="790" y="130" width="100" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_base_conocimiento" value="BASE_CONOCIMIENTO&#xa;(contratos + audio)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=2;fontColor=#FFFFFF;fontSize=10;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="790" y="230" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_consumption" value="Consumo" style="rounded=1;whiteSpace=wrap;html=1;arcSize=6;fillColor=#003545;opacity=10;strokeColor=#11567F;strokeWidth=1;dashed=0;verticalAlign=top;align=center;fontSize=14;fontStyle=1;fontFamily=Inter;fontColor=#11567F;" vertex="1" parent="1">
+          <mxGeometry x="980" y="70" width="200" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_notebook" value="Snowflake Notebook&#xa;(Ejercicios 1-5)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="140" width="160" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_si_ui" value="Snowflake Intelligence&#xa;(Chat UI)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#29B5E8;strokeColor=#11567F;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="230" width="160" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_cortex_code" value="Cortex Code&#xa;(Cmd+I)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#FF9F36;strokeColor=#CC7F2E;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="320" width="160" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="comp_usuario" value="Estudiante" style="rounded=1;whiteSpace=wrap;html=1;arcSize=4;fillColor=#F5F5F5;strokeColor=#666666;strokeWidth=1;dashed=1;fontColor=#333333;fontSize=12;fontFamily=Inter;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="430" width="160" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_img_ai" value="" style="curved=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_imagenes" target="comp_ai_complete">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_pdf_parse" value="" style="curved=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_pdfs" target="comp_ai_parse">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_audio_trans" value="" style="curved=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_audio" target="comp_ai_transcribe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_trans_sent" value="" style="curved=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1B74E4;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_ai_transcribe" target="comp_ai_sentiment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_parse_search" value="" style="curved=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_ai_parse" target="comp_cortex_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_sint_tables" value="" style="curved=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_sinteticos" target="comp_semantic_view">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_search_agent" value="" style="curved=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_cortex_search" target="comp_agent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_analyst_agent" value="" style="curved=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.3;entryY=0;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_semantic_view" target="comp_agent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_agent_si" value="" style="curved=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FF9F36;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_agent" target="comp_si_ui">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_ai_notebook" value="" style="curved=1;rounded=0;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#71D3DC;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_ai_complete" target="comp_notebook">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_coco_notebook" value="" style="curved=1;rounded=0;dashed=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FF9F36;strokeWidth=2;fontFamily=Inter;" edge="1" parent="1" source="comp_cortex_code" target="comp_notebook">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_user_coco" value="" style="curved=1;rounded=0;dashed=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#8A999E;strokeWidth=1;fontFamily=Inter;" edge="1" parent="1" source="comp_usuario" target="comp_cortex_code">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_user_si" value="" style="curved=1;rounded=0;dashed=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#8A999E;strokeWidth=1;fontFamily=Inter;" edge="1" parent="1" source="comp_usuario" target="comp_si_ui">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label_ej1" value="Ej.1" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontFamily=Inter;fontColor=#1B74E4;" vertex="1" parent="1">
+          <mxGeometry x="240" y="135" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="label_ej2" value="Ej.2" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontFamily=Inter;fontColor=#1B74E4;" vertex="1" parent="1">
+          <mxGeometry x="240" y="215" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="label_ej3" value="Ej.3" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontFamily=Inter;fontColor=#1B74E4;" vertex="1" parent="1">
+          <mxGeometry x="240" y="295" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="label_ej45" value="Ej.4-5" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontStyle=1;fontFamily=Inter;fontColor=#FF9F36;" vertex="1" parent="1">
+          <mxGeometry x="940" y="330" width="40" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
