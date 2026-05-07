@@ -1,0 +1,64 @@
+# Snowflake AI Summit Workshop
+
+Workshop de 20 minutos que muestra capacidades AI de Snowflake: multimodal (imágenes, PDFs, audio), Cortex Analyst, Cortex Search, Snowflake Intelligence Agent y Cortex Code.
+
+## 🚀 Instalación rápida
+
+Pega en un Worksheet/Workspace de Snowsight con rol `ACCOUNTADMIN` y ejecuta:
+
+```sql
+USE ROLE ACCOUNTADMIN;
+ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
+CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
+CREATE DATABASE IF NOT EXISTS HOL_AI_SUMMIT;
+USE DATABASE HOL_AI_SUMMIT;
+USE SCHEMA PUBLIC;
+CREATE WAREHOUSE IF NOT EXISTS HOL_WH WAREHOUSE_SIZE=XSMALL AUTO_SUSPEND=60 INITIALLY_SUSPENDED=FALSE;
+USE WAREHOUSE HOL_WH;
+CREATE OR REPLACE API INTEGRATION github_hol_int
+  API_PROVIDER = git_https_api
+  API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-jparrado')
+  ENABLED = TRUE
+  ALLOWED_AUTHENTICATION_SECRETS = ();
+CREATE OR REPLACE GIT REPOSITORY hol_repo
+  API_INTEGRATION = github_hol_int
+  ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
+ALTER GIT REPOSITORY hol_repo FETCH;
+EXECUTE IMMEDIATE FROM @hol_repo/branches/main/bootstrap.sql;
+```
+
+Tarda ~75 segundos. Ver [`INSTALL.md`](./INSTALL.md) para detalles.
+
+### 🤖 Instalación con Cortex Code (1 línea)
+
+Pega en CoCo (`Cmd/Ctrl + I`):
+
+```
+Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con rol ACCOUNTADMIN
+```
+
+## 📂 Contenido
+
+| Archivo | Descripción |
+|---|---|
+| `bootstrap.sql` | Punto de entrada — ejecútalo y listo |
+| `setup.sql` | Crea tablas, semantic view, search, agente, notebook (lo invoca bootstrap) |
+| `notebook_ai_summit.ipynb` | 5 ejercicios del Workshop |
+| `prompts_cortex_code.md` | Prompts listos para Cortex Code |
+| `INSTALL.md` | Guía de instalación detallada |
+| `AGENTS.md` | Instrucciones determinísticas para LLM agents |
+| `datasets/` | Imágenes, PDFs, audios y CSVs precomputados |
+
+## 🎯 Próximos pasos para el estudiante
+
+1. **Projects > Notebooks > `NB_HOL_AI_SUMMIT`** — abre los ejercicios.
+2. **AI & ML > Snowflake Intelligence > Agente Seguros 360** — conversa con tus datos.
+
+## 🧹 Cleanup
+
+```sql
+USE ROLE ACCOUNTADMIN;
+DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
+DROP AGENT IF EXISTS SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360;
+DROP API INTEGRATION IF EXISTS github_hol_int;
+```
