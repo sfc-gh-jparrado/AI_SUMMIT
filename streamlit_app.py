@@ -223,10 +223,15 @@ with tab1:
     except Exception:
         pass
 
-    sql_choque_default = """SELECT AI_COMPLETE(
-  'claude-4-sonnet',
-  'Eres un perito de seguros. Describe el dano del vehiculo en esta imagen, indica severidad (leve/moderado/grave) y estima un rango de costo de reparacion en USD. Responde en espanol y en formato JSON con campos: descripcion, severidad, costo_estimado.',
-  TO_FILE('@AI_SUMMIT.PUBLIC.IMAGENES', 'choque.png')
+    sql_choque_default = """SELECT TRY_PARSE_JSON(
+  REGEXP_REPLACE(
+    AI_COMPLETE(
+      'claude-4-sonnet',
+      'Eres un perito de seguros. Describe el dano del vehiculo en esta imagen, indica severidad (leve/moderado/grave) y estima un rango de costo de reparacion en USD. Responde SOLO con un objeto JSON valido, sin markdown ni backticks ni texto adicional, en espanol, con los campos: descripcion, severidad, costo_estimado.',
+      TO_FILE('@AI_SUMMIT.PUBLIC.IMAGENES', 'choque.png')
+    ),
+    '```(json)?', ''
+  )
 ) AS analisis_siniestro;"""
     sql_choque = editable_sql("choque", sql_choque_default, height=200)
 
