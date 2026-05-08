@@ -1,0 +1,131 @@
+<mxfile host="app.diagrams.net" version="24.7.17">
+  <diagram name="Workshop AI Summit - Components" id="components">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="Workshop AI Summit - Arquitectura de Componentes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontStyle=1;fontColor=#11567F;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1520" height="40" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ext" value="Externo" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;fontColor=#666666;fontStyle=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=10;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="100" width="240" height="700" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="github" value="GitHub Repo&#10;(scripts SQL + datasets)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#181717;strokeColor=#181717;fontColor=#FFFFFF;fontSize=12;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="user" value="Usuario&#10;(Snowsight Browser)" style="shape=actor;html=1;fillColor=#11567F;strokeColor=#11567F;fontColor=#FFFFFF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="150" y="350" width="60" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="snow" value="Snowflake Account" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F8FB;strokeColor=#29B5E8;strokeWidth=3;fontColor=#11567F;fontStyle=1;align=left;verticalAlign=top;spacingLeft=15;spacingTop=12;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="360" y="100" width="1200" height="700" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="api_int" value="API Integration&#10;github_ai_summit_int" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#11567F;fontColor=#11567F;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="170" width="180" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="git_obj" value="Git Repository&#10;ai_summit_repo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#11567F;fontColor=#11567F;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="400" y="250" width="180" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="storage_g" value="Capa de Datos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#29B5E8;dashed=1;fontColor=#11567F;fontStyle=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="620" y="160" width="430" height="280" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="stages" value="Stages internos&#10;@IMAGENES, @DOCUMENTOS, @AUDIO" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFFFFF;strokeColor=#29B5E8;fontColor=#11567F;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="200" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tables" value="Tablas estructuradas&#10;POLIZAS, CLIENTES, RECLAMACIONES" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFFFFF;strokeColor=#29B5E8;fontColor=#11567F;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="860" y="200" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tables2" value="Tablas hidratadas&#10;DOCS_PARSED, TRANSCRIPCIONES" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFFFFF;strokeColor=#29B5E8;fontColor=#11567F;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="320" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="kb" value="BASE_CONOCIMIENTO&#10;(union para Search)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFFFFF;strokeColor=#29B5E8;fontColor=#11567F;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="860" y="320" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ai_g" value="Capa de IA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#29B5E8;dashed=1;fontColor=#11567F;fontStyle=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="620" y="470" width="430" height="180" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ai_func" value="AI Functions&#10;AI_COMPLETE, AI_EXTRACT,&#10;AI_TRANSCRIBE, AI_SENTIMENT,&#10;AI_FILTER, AI_REDACT, AI_AGG, AI_CLASSIFY" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#29B5E8;strokeColor=#11567F;fontColor=#FFFFFF;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="640" y="510" width="200" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="analyst" value="Cortex Analyst&#10;Semantic View&#10;SV_SEGUROS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#29B5E8;strokeColor=#11567F;fontColor=#FFFFFF;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="510" width="200" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="search" value="Cortex Search&#10;Service DOCS_SEARCH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#29B5E8;strokeColor=#11567F;fontColor=#FFFFFF;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="575" width="200" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="agent" value="Snowflake Intelligence Agent&#10;AGENTE_SEGUROS_360&#10;(orquestador + tool routing)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#11567F;strokeColor=#11567F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="510" width="220" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ui_g" value="UI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#29B5E8;dashed=1;fontColor=#11567F;fontStyle=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="160" width="420" height="280" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="streamlit" value="Streamlit-in-Snowflake&#10;WORKSHOP_APP&#10;(5 secciones interactivas)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#29B5E8;strokeColor=#11567F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="220" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="si_chat" value="Snowflake Intelligence&#10;Chat UI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#29B5E8;strokeColor=#11567F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="220" width="180" height="100" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="coco" value="Cortex Code (provisioning)&#10;creo todo lo de arriba con 4 prompts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#29B5E8;strokeWidth=2;fontColor=#11567F;fontSize=11;fontStyle=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="350" width="380" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=classic;html=1;strokeColor=#11567F;strokeWidth=2;" edge="1" parent="1" source="github" target="api_int">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" style="endArrow=none;html=1;strokeColor=#999999;dashed=1;" edge="1" parent="1" source="api_int" target="git_obj">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1;strokeColor=#11567F;" edge="1" parent="1" source="git_obj" target="stages">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1;strokeColor=#29B5E8;" edge="1" parent="1" source="ai_func" target="tables2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1;strokeColor=#29B5E8;" edge="1" parent="1" source="analyst" target="tables">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1;strokeColor=#29B5E8;" edge="1" parent="1" source="search" target="kb">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" style="endArrow=classic;html=1;strokeColor=#11567F;" edge="1" parent="1" source="agent" target="analyst">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" style="endArrow=classic;html=1;strokeColor=#11567F;" edge="1" parent="1" source="agent" target="search">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" style="endArrow=classic;html=1;strokeColor=#11567F;strokeWidth=2;" edge="1" parent="1" source="streamlit" target="ai_func">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" style="endArrow=classic;html=1;strokeColor=#11567F;strokeWidth=2;" edge="1" parent="1" source="si_chat" target="agent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e11" style="endArrow=classic;html=1;strokeColor=#11567F;strokeWidth=2;" edge="1" parent="1" source="user" target="streamlit">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" style="endArrow=classic;html=1;strokeColor=#11567F;strokeWidth=2;" edge="1" parent="1" source="user" target="si_chat">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
