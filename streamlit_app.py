@@ -146,8 +146,7 @@ with st.container(border=True):
     with c1:
         st.markdown("### :blue[**Workshop AI Summit**] - IA Multimodal con Snowflake")
         st.caption(
-            "20 minutos · 5 ejercicios · imagenes, documentos, audio + Cortex Code "
-            "+ Snowflake Intelligence Agent"
+            "20 minutos · 4 ejercicios · imagenes, documentos, audio + AI Functions"
         )
     with c2:
         st.markdown("**:gray[Contexto]**")
@@ -156,15 +155,13 @@ with st.container(border=True):
 st.write("")  # spacer
 
 # =========================================================== tabs
-tab0, tab1, tab2, tab3, tab6, tab4, tab5 = st.tabs(
+tab0, tab1, tab2, tab3, tab6 = st.tabs(
     [
         "Bienvenida",
         "Imagenes",
         "Documentos",
         "Audio",
         "Mas AI Functions",
-        "Cortex Code",
-        "Agente",
     ]
 )
 
@@ -203,17 +200,6 @@ with tab0:
             "Llamadas reales del contact center se convierten a texto con `AI_TRANSCRIBE`, "
             "medimos el sentimiento del cliente con `AI_SENTIMENT` y `AI_COMPLETE` genera "
             "**coaching automatico** para el asesor (puntos de dolor, fortalezas, script sugerido).",
-        ),
-        (
-            "Cortex Code",
-            "Le pides en lenguaje natural lo que necesitas (una vista, una app Streamlit, "
-            "una clasificacion) y **Cortex Code escribe el SQL por ti**, directo en Snowsight.",
-        ),
-        (
-            "Snowflake Intelligence Agent",
-            "Cerramos con el agente **AGENTE_SEGUROS_360** que combina **Cortex Analyst** "
-            "(texto-a-SQL sobre polizas, clientes y reclamaciones), **Cortex Search** "
-            "(contratos + transcripciones) y graficos automaticos.",
         ),
         (
             "Mas AI Functions",
@@ -448,120 +434,6 @@ FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
         "clouds. Aqui es **SQL puro sobre el archivo en su lugar**, sin pipelines.\n\n"
         "**Imagina procesar** todas las llamadas de tu contact center, reuniones de venta o "
         "entrevistas y entenderlas automaticamente esta semana."
-    )
-
-# =================================================================== Tab 4
-with tab4:
-    st.subheader("Cortex Code")
-    st.markdown(
-        "Para abrir **Cortex Code** haz clic en el **icono de la chispa** ubicado en la "
-        "**esquina inferior derecha** de Snowsight. "
-        "Asegurate de estar en `AI_SUMMIT.PUBLIC` con warehouse `AI_SUMMIT_WH`. "
-        "Pega cada prompt y observa como Cortex Code genera el codigo."
-    )
-
-    prompts = [
-        (
-            "Vista que clasifica imagenes",
-            "Crea una vista llamada V_IMAGENES_CLASIFICADAS que recorra todos los archivos "
-            "del stage IMAGENES y agregue una columna con la clasificacion del tipo de imagen "
-            "(cedula, accidente vehicular, factura, otro) usando AI_CLASSIFY directamente sobre cada archivo.",
-        ),
-        (
-            "Vista 360 unificada",
-            "Crea una vista llamada V_HOL_360 que combine las filas de DOCS_PARSED y "
-            "TRANSCRIPCIONES en un solo dataset con columnas: tipo_fuente, archivo, contenido, sentimiento.",
-        ),
-        (
-            "Conversa con tus datos",
-            "Genera un SELECT que invoque a AI_COMPLETE preguntandole: cuanto es el canon mensual "
-            "del contrato numero 2 y cual fue el sentimiento de la ultima llamada?",
-        ),
-        (
-            "App Streamlit dashboard",
-            "Crea una app Streamlit in Snowflake llamada DASHBOARD_HOL que muestre el total de "
-            "imagenes por tipo, el sentimiento de las llamadas en grafico de barras, y un campo "
-            "de chat conectado al agente.",
-        ),
-    ]
-
-    for i, (title, prompt) in enumerate(prompts, 1):
-        with st.container(border=True):
-            st.markdown(f"**Prompt {i} - {title}**")
-            st.code(prompt, language="text")
-
-    st.info(
-        "**Insight competitivo:** lo que toma a un equipo dias de desarrollo (vistas, queries, "
-        "apps), Cortex Code lo escribe en segundos directo en Snowsight. **Sin sprints, sin "
-        "tickets, sin esperar.**\n\n**Piensa:** que vista, dashboard o pipeline llevas semanas "
-        "esperando que alguien construya en tu empresa?"
-    )
-
-# =================================================================== Tab 5
-with tab5:
-    st.subheader("Cortex Analyst + Search + Agente")
-    st.markdown(
-        "Cerramos con el **Snowflake Intelligence Agent** que combina texto-a-SQL, "
-        "busqueda semantica y graficos."
-    )
-
-    st.markdown("##### Cortex Analyst - preguntas en espanol sobre datos estructurados")
-    sql_region_default = """SELECT region, SUM(prima_mensual) AS total_primas, COUNT(*) AS num_polizas
-FROM AI_SUMMIT.PUBLIC.POLIZAS
-WHERE estado = 'Activa'
-GROUP BY region
-ORDER BY total_primas DESC;"""
-    sql_region = editable_sql("region", sql_region_default, height=140)
-
-    if run_query_buttons("region"):
-        df = safe_run(sql_region)
-        if df is not None:
-            st.dataframe(df, use_container_width=True, hide_index=True)
-            st.bar_chart(df.set_index("REGION")["TOTAL_PRIMAS"])
-
-    st.divider()
-    st.markdown("##### Cortex Search - busqueda semantica en contratos y llamadas")
-    query = st.text_input("Tu busqueda:", value="cliente molesto sin servicio", key="search_q")
-    sql_search_default = (
-        "SELECT SNOWFLAKE.CORTEX.SEARCH_PREVIEW(\n"
-        "  'AI_SUMMIT.PUBLIC.DOCS_SEARCH',\n"
-        '  \'{"query": "<TU_BUSQUEDA>", "columns": ["contenido","file_name","tipo_documento"], "limit": 3}\'\n'
-        ") AS R"
-    )
-    sql_search = editable_sql("search", sql_search_default, height=140)
-
-    if run_query_buttons("search"):
-        sql = sql_search.replace("<TU_BUSQUEDA>", query.replace("'", ""))
-        df = safe_run(sql, "Buscando...")
-        if df is not None:
-            try:
-                res = df.iloc[0]["R"]
-                data = json.loads(res) if isinstance(res, str) else res
-                for hit in data.get("results", []):
-                    with st.expander(
-                        f"{hit.get('file_name', '?')} ({hit.get('tipo_documento', '?')})"
-                    ):
-                        st.write(hit.get("contenido", ""))
-            except Exception as e:
-                st.error(f"Error parseando resultados: {e}")
-
-    st.divider()
-    st.markdown("##### Snowflake Intelligence Agent")
-    st.markdown(
-        "El agente `AGENTE_SEGUROS_360` ya esta creado y combina los 3 tools: "
-        "Cortex Analyst, Cortex Search y data_to_chart."
-    )
-    st.link_button(
-        "Abrir el agente en Snowflake Intelligence",
-        "https://ai.snowflake.com",
-        type="primary",
-        use_container_width=True,
-    )
-
-    st.success(
-        "**Felicitaciones!** En 20 minutos pasaste de archivos crudos "
-        "(imagenes, PDFs, audio) a un agente conversacional productivo. "
-        "**El proximo paso es tuyo:** lleva uno de estos casos a tu organizacion esta semana."
     )
 
 # =================================================================== Tab 6 (Mas AI Functions)
