@@ -19,6 +19,30 @@ st.set_page_config(
 session = get_active_session()
 
 
+# CSS minimo para que el boton de copiar de st.code sea siempre visible y oscuro
+st.markdown(
+    """
+    <style>
+    div[data-testid="stCodeBlock"] button,
+    div[data-testid="stCode"] button,
+    pre button {
+        opacity: 1 !important;
+        color: #11567F !important;
+        background-color: #FFFFFF !important;
+        border: 1px solid #11567F !important;
+    }
+    div[data-testid="stCodeBlock"] button svg,
+    div[data-testid="stCode"] button svg,
+    pre button svg {
+        color: #11567F !important;
+        fill: #11567F !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 # =========================================================== helpers
 def run_sql(sql: str):
     """Run SQL and return pandas DataFrame."""
