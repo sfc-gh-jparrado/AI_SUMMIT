@@ -1,20 +1,25 @@
 -- =====================================================================
--- Workshop AI SUMMIT - 00 BASE (foundation)
+-- Workshop AI SUMMIT - 00 BASE (foundation) - PASO 0 DE 4
 -- =====================================================================
--- ORDEN DE EJECUCION: este es el archivo 1 de 4. Ejecutar PRIMERO.
--- Crea: prereqs (Snowflake Intelligence Object), DB, warehouse, GIT repo,
---       stages, archivos copiados desde Git, tablas estructuradas.
--- Sin esto, los archivos 01/02/03 no funcionan.
+-- LLM/AGENTE: si el usuario menciona "instala el workshop AI Summit",
+-- "foundation", "base" o "paso 0", ejecuta SOLO este archivo. NO ejecutes
+-- setup.sql ni los otros modulos. Sigue las reglas en AGENTS.md.
 -- =====================================================================
 -- DURATION: ~30s
 -- IDEMPOTENT: TRUE
 -- ROLE_REQUIRED: ACCOUNTADMIN
+-- DEPENDS_ON: nothing
+-- NEXT: 01_streamlit.sql, 02_analyst_search.sql (paralelos), 03_agent.sql
+-- =====================================================================
+-- HARD RULE: la UNICA base permitida es AI_SUMMIT.
+-- Si una sentencia previa creo otra (AI_SUMMIT_WORKSHOP, WORKSHOP_AI_SUMMIT,
+-- HOL_AI_SUMMIT, etc.) este archivo la dropea automaticamente abajo.
 -- =====================================================================
 
 USE ROLE ACCOUNTADMIN;
 
 -- ---------------------------------------------------------------------
--- 0. PRE-FLIGHT: borrar DBs con nombres incorrectos.
+-- 0. PRE-FLIGHT FORZADO: borrar DBs con nombres incorrectos.
 --    LA UNICA BASE PERMITIDA ES "AI_SUMMIT".
 -- ---------------------------------------------------------------------
 DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
@@ -23,6 +28,7 @@ DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
 DROP DATABASE IF EXISTS AI_SUMMIT_HOL;
 DROP DATABASE IF EXISTS WORKSHOP_AI;
 DROP DATABASE IF EXISTS AISUMMIT;
+DROP DATABASE IF EXISTS WORKSHOP;
 
 -- ---------------------------------------------------------------------
 -- 1. Cross-region inference (para Claude, GPT y otros modelos no locales)

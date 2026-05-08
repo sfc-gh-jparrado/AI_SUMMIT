@@ -1,53 +1,47 @@
 # AGENTS.md - Workshop AI Summit
 
-> **This file is for LLM agents (Cortex Code, Claude Code, Cursor, etc.).**
-> If a user asks to install, deploy, or set up the "AI Summit" workshop / "Workshop AI Summit" / "HOL AI Summit", follow these instructions **verbatim**. Do NOT improvise.
+> **For LLM agents (Cortex Code, Claude Code, Cursor, etc.).** Routing rules below are AUTHORITATIVE. Follow them verbatim, do NOT improvise.
 
-## CRITICAL - Database name policy (read this first)
+## Routing table - the user will use SHORT prompts. Match the intent, run the file.
 
-**The ONLY database the user wants is `AI_SUMMIT`.** No other names. No translations.
+When the user mentions ANY of the keywords below, run **only** the indicated file from the GIT repo `https://github.com/sfc-gh-jparrado/AI_SUMMIT.git` (branch `main`):
 
-Before doing anything else, run this exact pre-flight script:
+| User says (any of these keywords) | Run file | Duration |
+|---|---|---|
+| "foundation", "base", "paso base", "instalar workshop", "instala el setup base", "instalar AI Summit", "00", "0" | `00_base.sql` | ~30s |
+| "streamlit", "notebook", "paso 1", "paso del streamlit", "01" | `01_streamlit.sql` | ~10s |
+| "cortex analyst", "cortex search", "semantic view", "search service", "paso 2", "02" | `02_analyst_search.sql` | ~45s |
+| "agente", "agent", "snowflake intelligence", "paso 3", "03" | `03_agent.sql` | ~5s |
+| "todo el workshop", "instala todo", "one-shot", "todo en uno" | `setup.sql` | ~90s |
+
+If the prompt is ambiguous (e.g. just "instala el workshop"), assume the user means **modular** and start from `00_base.sql`. If `00_base.sql` already ran, continue with the next module the user mentions.
+
+## Hard rules - NEVER violate these
+
+1. **The ONE database is `AI_SUMMIT`.** Not `AI_SUMMIT_WORKSHOP`, not `WORKSHOP_AI_SUMMIT`, not `HOL_AI_SUMMIT`, not `AISUMMIT`, not `WORKSHOP`. Use `AI_SUMMIT` and only `AI_SUMMIT`. The pre-flight cleanup in `00_base.sql` already drops wrong-name DBs - if you see one created elsewhere, drop it.
+2. **Use the `ACCOUNTADMIN` role.**
+3. **Do NOT generate SQL "from scratch".** Always `EXECUTE IMMEDIATE FROM @stage/<file>.sql` against the repo. The files are battle-tested.
+4. **Do NOT wrap module files in `EXECUTE IMMEDIATE $$ ... $$;`.** They are multi-statement scripts; the `EXECUTE IMMEDIATE FROM @stage` clause already handles them.
+5. **Do NOT manually `CREATE SCHEMA SNOWFLAKE_INTELLIGENCE.AGENTS`.** It is owned by `SNOWFLAKE_INTELLIGENCE_ADMIN`; ACCOUNTADMIN cannot operate on it. Let `00_base.sql` handle it via `CREATE SNOWFLAKE INTELLIGENCE`.
+6. **Do NOT change `WAREHOUSE_SIZE` from `XSMALL`.**
+7. **The agent MUST live in `SNOWFLAKE_INTELLIGENCE.AGENTS`,** not in `AI_SUMMIT.PUBLIC`.
+8. **Modules 01 and 02 are independent** and may run in parallel after 00 finishes. Module 03 requires 02.
+
+## Bootstrap (run once before EXECUTE IMMEDIATE FROM works)
+
+If the GIT repo `AI_SUMMIT_REPO` does not exist yet, paste this small bootstrap first:
 
 ```sql
 USE ROLE ACCOUNTADMIN;
 
--- Drop any database that an LLM may have invented from natural language
+-- Pre-flight: drop wrong-name DBs an LLM may have invented
 DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
 DROP DATABASE IF EXISTS WORKSHOP_AI_SUMMIT;
 DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
 DROP DATABASE IF EXISTS AI_SUMMIT_HOL;
 DROP DATABASE IF EXISTS WORKSHOP_AI;
 DROP DATABASE IF EXISTS AISUMMIT;
-DROP DATABASE IF EXISTS WORKSHOP;
-```
 
-**Rule:** if you (LLM) feel tempted to create a database with any name other than `AI_SUMMIT`, STOP. Use `AI_SUMMIT` and only `AI_SUMMIT`.
-
-## Authoritative install procedure - PREFER THE MODULAR PATH
-
-The repo is split into **4 ordered SQL modules**. Execute them in order. Each is idempotent and self-documenting.
-
-| Step | File | Duration | Depends on |
-|---|---|---|---|
-| 0 | `00_base.sql` | ~30s | nothing |
-| 1 | `01_streamlit.sql` | ~10s | step 0 |
-| 2 | `02_analyst_search.sql` | ~45s | step 0 |
-| 3 | `03_agent.sql` | ~5s | steps 0 + 2 |
-
-Steps 1 and 2 are **independent** and may run in parallel after step 0 finishes.
-
-### Bootstrap the GIT repo first (only needed once)
-
-```sql
-USE ROLE ACCOUNTADMIN;
-
--- Pre-flight cleanup
-DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
-DROP DATABASE IF EXISTS WORKSHOP_AI_SUMMIT;
-DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
-
--- Minimal scaffolding so we can EXECUTE IMMEDIATE FROM the repo
 CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
 USE DATABASE AI_SUMMIT;
 USE SCHEMA PUBLIC;
@@ -67,31 +61,9 @@ CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
 ALTER GIT REPOSITORY ai_summit_repo FETCH;
 ```
 
-### Then run the 4 modules
+Then run the appropriate module(s) according to the routing table.
 
-```sql
--- Step 0 (foundation): DB context, stages, data, tables
-EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/00_base.sql;
-
--- Step 1 (Streamlit + Notebook) - CAN run in parallel with step 2
-EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/01_streamlit.sql;
-
--- Step 2 (Cortex Analyst + Cortex Search) - CAN run in parallel with step 1
-EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/02_analyst_search.sql;
-
--- Step 3 (Snowflake Intelligence Agent) - REQUIRES step 2
-EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/03_agent.sql;
-```
-
-### One-shot alternative
-
-`setup.sql` at the repo root chains all 4 modules in order. Use it if the user wants a single paste:
-
-```sql
-EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/setup.sql;
-```
-
-## Hard-coded names (DO NOT modify)
+## Hard-coded names
 
 | Object | Name |
 |---|---|
@@ -110,30 +82,8 @@ EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/setup.sql;
 ```sql
 SHOW DATABASES LIKE 'AI_SUMMIT%';  -- expect ONLY AI_SUMMIT
 SHOW AGENTS LIKE 'AGENTE_SEGUROS_360' IN SCHEMA SNOWFLAKE_INTELLIGENCE.AGENTS;
-SHOW NOTEBOOKS LIKE 'NB_AI_SUMMIT' IN SCHEMA AI_SUMMIT.PUBLIC;
 SHOW STREAMLITS LIKE 'WORKSHOP_APP' IN SCHEMA AI_SUMMIT.PUBLIC;
 SELECT COUNT(*) FROM AI_SUMMIT.PUBLIC.POLIZAS;  -- expect 30
 ```
 
-## Things NOT to do
-
-- Do NOT create any database with a name OTHER than `AI_SUMMIT`. No `AI_SUMMIT_WORKSHOP`, no `WORKSHOP_AI_SUMMIT`, no `HOL_AI_SUMMIT`. Use `AI_SUMMIT`.
-- Do NOT translate "Workshop AI Summit" into a database identifier.
-- Do NOT generate alternative SQL "from scratch". Always run the modules in the repo.
-- Do NOT change `WAREHOUSE_SIZE` from `XSMALL`.
-- Do NOT skip `ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION'` (handled by `00_base.sql`).
-- Do NOT create the agent in `AI_SUMMIT.PUBLIC` - it must be in `SNOWFLAKE_INTELLIGENCE.AGENTS`.
-- Do NOT wrap any of the module files in an extra `EXECUTE IMMEDIATE $$ ... $$;` block. The modules are multi-statement scripts and the EXECUTE IMMEDIATE FROM @stage clause already handles them correctly.
-- Do NOT manually `CREATE SCHEMA SNOWFLAKE_INTELLIGENCE.AGENTS` - that schema is owned by `SNOWFLAKE_INTELLIGENCE_ADMIN` and `ACCOUNTADMIN` cannot operate on it. Let `CREATE SNOWFLAKE INTELLIGENCE` (in `00_base.sql`) provision it.
-
-## Self-check before responding to user
-
-After execution, verify only ONE workshop database exists:
-
-```sql
-SELECT COUNT(*) AS workshop_dbs FROM SNOWFLAKE.INFORMATION_SCHEMA.DATABASES
-WHERE DATABASE_NAME LIKE 'AI_SUMMIT%' OR DATABASE_NAME LIKE 'WORKSHOP%' OR DATABASE_NAME LIKE 'HOL_AI%';
--- Must return 1 (only AI_SUMMIT)
-```
-
-If the count is > 1, you (LLM) created an extra database. Drop it and report it to the user.
+If `SHOW DATABASES` returns more than `AI_SUMMIT`, you (LLM) created an extra DB. Drop it.

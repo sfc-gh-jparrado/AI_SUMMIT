@@ -1,6 +1,6 @@
 # Guion de Prompts para Cortex Code (Workshop AI Summit)
 
-> **Como usarlo:** Abre **Cortex Code** en Snowsight haciendo clic en el icono de la chispa en la esquina inferior derecha. Asegurate de estar con rol `ACCOUNTADMIN` en el contexto `AI_SUMMIT.PUBLIC` con warehouse `AI_SUMMIT_WH`. Pega cada prompt y deja que Cortex Code genere y ejecute el SQL.
+> **Como usarlo:** Abre **Cortex Code** (icono de chispa abajo a la derecha en Snowsight) con rol `ACCOUNTADMIN`. Las reglas y rutas estan en `AGENTS.md` del repo: el LLM las sigue automaticamente. Por eso los prompts son cortos.
 
 ---
 
@@ -13,7 +13,7 @@
 Tiempo aprox: ~30 segundos.
 
 ```
-Con rol ACCOUNTADMIN, conecta el repo publico https://github.com/sfc-gh-jparrado/AI_SUMMIT.git y ejecuta SOLO el archivo 00_base.sql del branch main. Usa exactamente la base de datos AI_SUMMIT, no inventes otro nombre.
+Con rol ACCOUNTADMIN, instala la foundation del Workshop AI Summit (repo: sfc-gh-jparrado/AI_SUMMIT). Sigue AGENTS.md.
 ```
 
 ### Prompt 1 - Streamlit + Notebook (las AI Functions)
@@ -21,7 +21,7 @@ Con rol ACCOUNTADMIN, conecta el repo publico https://github.com/sfc-gh-jparrado
 Tiempo aprox: ~10 segundos. Requiere prompt 0 ya completado.
 
 ```
-En AI_SUMMIT.PUBLIC con rol ACCOUNTADMIN ejecuta SOLO el archivo 01_streamlit.sql desde el repo Git ai_summit_repo (branch main). Esto crea el Notebook NB_AI_SUMMIT y la app Streamlit WORKSHOP_APP. Confirma al final que ambos existen y que la Streamlit es accesible en AI & ML > Streamlit Apps.
+Instala el paso de Streamlit + Notebook del Workshop AI Summit. Sigue AGENTS.md.
 ```
 
 ### Prompt 2 - Cortex Analyst + Cortex Search
@@ -29,7 +29,7 @@ En AI_SUMMIT.PUBLIC con rol ACCOUNTADMIN ejecuta SOLO el archivo 01_streamlit.sq
 Tiempo aprox: ~45 segundos. Requiere prompt 0 ya completado. Puede correrse en paralelo con prompt 1.
 
 ```
-En AI_SUMMIT.PUBLIC con rol ACCOUNTADMIN ejecuta SOLO el archivo 02_analyst_search.sql desde el repo Git ai_summit_repo (branch main). Esto crea la tabla BASE_CONOCIMIENTO, el Cortex Search Service DOCS_SEARCH (con embedding snowflake-arctic-embed-l-v2.0) y la Semantic View SV_SEGUROS para Cortex Analyst con dimensiones, metricas y verified queries. Confirma al final que SV_SEGUROS y DOCS_SEARCH existen.
+Instala el paso de Cortex Analyst + Cortex Search del Workshop AI Summit. Sigue AGENTS.md.
 ```
 
 ### Prompt 3 - Snowflake Intelligence Agent
@@ -37,7 +37,7 @@ En AI_SUMMIT.PUBLIC con rol ACCOUNTADMIN ejecuta SOLO el archivo 02_analyst_sear
 Tiempo aprox: ~5 segundos. Requiere prompts 0 y 2 completados.
 
 ```
-En AI_SUMMIT.PUBLIC con rol ACCOUNTADMIN ejecuta SOLO el archivo 03_agent.sql desde el repo Git ai_summit_repo (branch main). Esto crea el agente AGENTE_SEGUROS_360 en SNOWFLAKE_INTELLIGENCE.AGENTS integrando los 3 tools (Cortex Analyst sobre SV_SEGUROS, Cortex Search sobre DOCS_SEARCH, data_to_chart) y lo registra en el Snowflake Intelligence Object para que aparezca en la UI. Confirma al final que el agente existe y esta listado en SHOW AGENTS IN SCHEMA SNOWFLAKE_INTELLIGENCE.AGENTS.
+Instala el agente Snowflake Intelligence del Workshop AI Summit. Sigue AGENTS.md.
 ```
 
 ---
@@ -47,7 +47,7 @@ En AI_SUMMIT.PUBLIC con rol ACCOUNTADMIN ejecuta SOLO el archivo 03_agent.sql de
 > Mas simple pero **mas lento** (~90s en serie) y, si falla en medio, mas dificil de diagnosticar.
 
 ```
-Instala el Workshop AI Summit del repo publico sfc-gh-jparrado/AI_SUMMIT con rol ACCOUNTADMIN. La UNICA base de datos permitida es AI_SUMMIT (no AI_SUMMIT_WORKSHOP, no WORKSHOP_AI_SUMMIT, no HOL_AI_SUMMIT). Antes de cualquier paso ejecuta DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP, WORKSHOP_AI_SUMMIT, HOL_AI_SUMMIT. Luego ejecuta setup.sql del repo tal cual sin modificar nombres ni envolverlo en otro EXECUTE IMMEDIATE.
+Instala todo el Workshop AI Summit (one-shot). Sigue AGENTS.md.
 ```
 
 ---

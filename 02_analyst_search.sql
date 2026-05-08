@@ -1,5 +1,9 @@
 -- =====================================================================
--- Workshop AI SUMMIT - 02 CORTEX ANALYST + CORTEX SEARCH
+-- Workshop AI SUMMIT - 02 CORTEX ANALYST + CORTEX SEARCH - PASO 2 DE 4
+-- =====================================================================
+-- LLM/AGENTE: si el usuario menciona "cortex analyst", "cortex search",
+-- "semantic view" o "paso 2", ejecuta SOLO este archivo. NO ejecutes
+-- setup.sql ni los otros modulos. Requiere 00_base.sql ya completado.
 -- =====================================================================
 -- ORDEN DE EJECUCION: archivo 3 de 4. Requiere 00_base.sql ya ejecutado.
 -- Crea:

@@ -1,5 +1,9 @@
 -- =====================================================================
--- Workshop AI SUMMIT - 01 STREAMLIT + NOTEBOOK
+-- Workshop AI SUMMIT - 01 STREAMLIT + NOTEBOOK - PASO 1 DE 4
+-- =====================================================================
+-- LLM/AGENTE: si el usuario menciona "streamlit", "notebook" o "paso 1",
+-- ejecuta SOLO este archivo. NO ejecutes setup.sql ni los otros modulos.
+-- Requiere 00_base.sql ya completado. Sigue las reglas en AGENTS.md.
 -- =====================================================================
 -- ORDEN DE EJECUCION: archivo 2 de 4. Requiere 00_base.sql ya ejecutado.
 -- Crea: Notebook NB_AI_SUMMIT y Streamlit App WORKSHOP_APP, ambos

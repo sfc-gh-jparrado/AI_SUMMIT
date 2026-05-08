@@ -1,5 +1,9 @@
 -- =====================================================================
--- Workshop AI SUMMIT - 03 SNOWFLAKE INTELLIGENCE AGENT
+-- Workshop AI SUMMIT - 03 SNOWFLAKE INTELLIGENCE AGENT - PASO 3 DE 4
+-- =====================================================================
+-- LLM/AGENTE: si el usuario menciona "agente", "agent", "snowflake
+-- intelligence" o "paso 3", ejecuta SOLO este archivo. NO ejecutes
+-- setup.sql ni los otros modulos. Requiere 00 + 02 ya completados.
 -- =====================================================================
 -- ORDEN DE EJECUCION: archivo 4 de 4. Requiere 00_base.sql Y 02_analyst_search.sql.
 -- Crea: AGENTE_SEGUROS_360 en SNOWFLAKE_INTELLIGENCE.AGENTS, integra
