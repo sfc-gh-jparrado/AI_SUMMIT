@@ -30,9 +30,11 @@ ALTER GIT REPOSITORY AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO FETCH;
 
 -- ---------------------------------------------------------------------
 -- 1. Streamlit-in-Snowflake (UI principal del Workshop)
+--    Usamos ROOT_LOCATION (sintaxis estable para Git stages) en lugar de FROM,
+--    que en algunos trials produce: "MAIN_FILE cannot be found".
 -- ---------------------------------------------------------------------
-CREATE OR REPLACE STREAMLIT WORKSHOP_APP
-  FROM '@AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/'
+CREATE OR REPLACE STREAMLIT AI_SUMMIT.PUBLIC.WORKSHOP_APP
+  ROOT_LOCATION = '@AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main'
   MAIN_FILE = 'streamlit_app.py'
   QUERY_WAREHOUSE = AI_SUMMIT_WH
   TITLE = 'Workshop AI Summit'
