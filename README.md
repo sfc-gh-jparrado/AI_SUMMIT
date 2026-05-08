@@ -1,15 +1,28 @@
 # Snowflake AI Summit Workshop
 
-Workshop de 20 minutos que muestra capacidades AI de Snowflake: multimodal (imágenes, PDFs, audio), Cortex Analyst, Cortex Search, Snowflake Intelligence Agent y Cortex Code.
+Workshop de 20 minutos que muestra capacidades AI de Snowflake: multimodal (imagenes, PDFs, audio), Cortex Analyst, Cortex Search, Snowflake Intelligence Agent y Cortex Code.
 
-## 🚀 Instalación rápida
+## Instalacion - 2 caminos
 
-Pega en un Worksheet/Workspace de Snowsight con rol `ACCOUNTADMIN` y ejecuta:
+### Camino A (recomendado): 4 prompts modulares en Cortex Code
+
+Mas rapido, menos propenso a errores, y los prompts 1 y 2 corren en paralelo.
+
+| Paso | Archivo | Tiempo | Que hace |
+|---|---|---|---|
+| **0** | `00_base.sql` | ~30s | DB, GIT, stages, archivos, tablas, prereqs |
+| **1** | `01_streamlit.sql` | ~10s | Notebook + Streamlit App |
+| **2** | `02_analyst_search.sql` | ~45s | Semantic View + Cortex Search Service |
+| **3** | `03_agent.sql` | ~5s | Snowflake Intelligence Agent |
+
+Pasos 1 y 2 son independientes y pueden correrse en paralelo. Paso 3 depende de 2.
+
+Ver [`prompts_cortex_code.md`](./prompts_cortex_code.md) para los prompts listos para pegar en Cortex Code.
+
+### Camino B (one-shot): pega y ejecuta `setup.sql`
 
 ```sql
 USE ROLE ACCOUNTADMIN;
-ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
-CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
 CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
 USE DATABASE AI_SUMMIT;
 USE SCHEMA PUBLIC;
@@ -27,35 +40,31 @@ ALTER GIT REPOSITORY ai_summit_repo FETCH;
 EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
 ```
 
-Tarda ~75 segundos. Ver [`INSTALL.md`](./INSTALL.md) para detalles.
+Tarda ~90 segundos en serie.
 
-### 🤖 Instalación con Cortex Code (1 línea)
+## Contenido
 
-Pega en CoCo (`Cmd/Ctrl + I`):
-
-```
-Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con rol ACCOUNTADMIN
-```
-
-## 📂 Contenido
-
-| Archivo | Descripción |
+| Archivo | Descripcion |
 |---|---|
-| `setup.sql` | **Instalador unico** - copia su contenido en un Worksheet y ejecutalo (Run All) |
-| `streamlit_app.py` | UI guiada del Workshop (6 secciones) — **recomendada** |
-| `notebook_ai_summit.ipynb` | 5 ejercicios del Workshop (alternativa al Streamlit) |
+| `00_base.sql` | Foundation: DB, GIT, stages, datos, tablas |
+| `01_streamlit.sql` | Notebook + Streamlit App |
+| `02_analyst_search.sql` | Semantic View + Cortex Search Service |
+| `03_agent.sql` | Snowflake Intelligence Agent |
+| `setup.sql` | Orquestador one-shot (corre los 4 modulos en orden) |
+| `streamlit_app.py` | UI guiada del Workshop (bienvenida + 5 ejercicios + bonus) |
+| `notebook_ai_summit.ipynb` | Alternativa tecnica al Streamlit |
 | `prompts_cortex_code.md` | Prompts listos para Cortex Code |
-| `INSTALL.md` | Guía de instalación detallada |
-| `AGENTS.md` | Instrucciones determinísticas para LLM agents |
-| `datasets/` | Imágenes, PDFs, audios y CSVs precomputados |
+| `INSTALL.md` | Guia de instalacion detallada |
+| `AGENTS.md` | Instrucciones deterministicas para LLM agents |
+| `datasets/` | Imagenes, PDFs, audios y CSVs precomputados |
 
-## 🎯 Próximos pasos para el estudiante
+## Proximos pasos para el estudiante
 
-1. **Projects > Streamlit > `WORKSHOP_APP`** ⭐ — UI guiada (recomendada para audiencias de negocio).
-2. (Alternativa) **Projects > Workspaces > Databases > AI_SUMMIT > PUBLIC > Notebooks > NB_AI_SUMMIT** — para audiencias técnicas.
-2. **AI & ML > Snowflake Intelligence > Agente Seguros 360** — conversa con tus datos.
+1. **Projects > Streamlit > `WORKSHOP_APP`** - UI guiada (recomendada para audiencias de negocio)
+2. (Alternativa) **Projects > Workspaces > AI_SUMMIT > PUBLIC > Notebooks > NB_AI_SUMMIT** - para audiencias tecnicas
+3. **AI & ML > Snowflake Intelligence > Agente Seguros 360** - conversa con tus datos
 
-## 🧹 Cleanup
+## Cleanup
 
 ```sql
 USE ROLE ACCOUNTADMIN;
