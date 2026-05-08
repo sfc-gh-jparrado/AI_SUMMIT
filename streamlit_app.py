@@ -171,7 +171,7 @@ with tab0:
         (
             "1. Imagenes con IA multimodal",
             "Le pasamos a Claude-4 una foto de un siniestro y una cedula. "
-            "En una sola consulta SQL obtenemos el peritaje y los datos KYC.",
+            "En una sola consulta SQL obtenemos el peritaje y los datos para verificar la identidad del cliente.",
         ),
         (
             "2. Documentos a datos estructurados",
@@ -237,7 +237,7 @@ with tab1:
             render_json(df.iloc[0]["ANALISIS_SINIESTRO"])
 
     st.divider()
-    st.markdown("##### Caso 2 - KYC: extraccion de datos de cedula con AI_EXTRACT")
+    st.markdown("##### Caso 2 - Verificacion de identidad: extraccion de datos de cedula con AI_EXTRACT")
     try:
         url = run_sql(
             "SELECT GET_PRESIGNED_URL(@AI_SUMMIT.PUBLIC.IMAGENES, 'cedula.jpg', 3600) AS U"
@@ -253,7 +253,7 @@ with tab1:
 ):response::VARIANT AS datos_cedula;"""
     sql_cedula = editable_sql("cedula", sql_cedula_default, height=140)
 
-    if st.button("Extraer datos KYC", key="btn_cedula", type="primary"):
+    if st.button("Extraer datos de identidad", key="btn_cedula", type="primary"):
         df = safe_run(sql_cedula, "Extrayendo campos...")
         if df is not None:
             st.success("Extraccion completada")
