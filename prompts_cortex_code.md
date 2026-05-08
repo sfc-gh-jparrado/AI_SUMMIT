@@ -13,7 +13,7 @@
 Tiempo aprox: ~30 segundos.
 
 ```
-Conecta el repo publico https://github.com/sfc-gh-jparrado/AI_SUMMIT.git con una API integration y ejecuta SOLO el archivo 00_base.sql desde el repo, usando rol ACCOUNTADMIN. La unica base de datos permitida es AI_SUMMIT (no AI_SUMMIT_WORKSHOP, no WORKSHOP_AI_SUMMIT, no HOL_AI_SUMMIT). Antes de cualquier paso ejecuta DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP, WORKSHOP_AI_SUMMIT, HOL_AI_SUMMIT. NO ejecutes setup.sql ni los otros archivos. Confirma al final que existen la base AI_SUMMIT, las tablas POLIZAS, CLIENTES, RECLAMACIONES, DOCS_PARSED, TRANSCRIPCIONES y los stages IMAGENES, DOCUMENTOS, AUDIO con archivos cargados.
+Con rol ACCOUNTADMIN, conecta el repo publico https://github.com/sfc-gh-jparrado/AI_SUMMIT.git y ejecuta SOLO el archivo 00_base.sql del branch main. Usa exactamente la base de datos AI_SUMMIT, no inventes otro nombre.
 ```
 
 ### Prompt 1 - Streamlit + Notebook (las AI Functions)
