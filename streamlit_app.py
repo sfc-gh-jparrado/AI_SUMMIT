@@ -136,7 +136,7 @@ with tab0:
         "final tendras un **agente conversacional** listo para tus datos."
     )
     st.markdown(
-        "**Lo unico que vas a usar es SQL**: nada de notebooks externos, sin mover archivos, "
+        "**Lo unico que vas a usar es SQL**: nada de aplicaciones externas, sin mover archivos, "
         "sin entrenar modelos. Todo corre dentro de Snowflake."
     )
 
