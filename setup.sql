@@ -1,14 +1,47 @@
 -- =====================================================================
 -- Workshop AI SUMMIT - SETUP COMPLETO
--- Este script es invocado por bootstrap.sql via EXECUTE IMMEDIATE FROM @ai_summit_repo.
--- Crea toda la infraestructura del Workshop: stages, datos, tablas sintéticas,
--- Cortex Search, Semantic View, Agente con Snowflake Intelligence y notebook.
+-- Este script puede ser invocado por bootstrap.sql via EXECUTE IMMEDIATE,
+-- o ejecutado de forma independiente. Es self-contained: crea sus
+-- prerequisitos (DB, warehouse, Snowflake Intelligence object) si no existen.
 -- =====================================================================
 
 USE ROLE ACCOUNTADMIN;
+
+-- ---------------------------------------------------------------------
+-- 0. PREREQUISITOS (idempotentes — seguros si ya existen por bootstrap.sql)
+-- ---------------------------------------------------------------------
+
+-- Habilitar inferencia cross-region (modelos no locales como Claude)
+ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
+
+-- Crear el Snowflake Intelligence Object (registro requerido para que el agente sea visible)
+CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
+
+-- Crear DB y warehouse si no existen
+CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
 USE DATABASE AI_SUMMIT;
+CREATE SCHEMA IF NOT EXISTS PUBLIC;
 USE SCHEMA PUBLIC;
+
+CREATE WAREHOUSE IF NOT EXISTS AI_SUMMIT_WH
+  WAREHOUSE_SIZE = XSMALL
+  AUTO_SUSPEND = 60
+  AUTO_RESUME = TRUE
+  INITIALLY_SUSPENDED = FALSE;
 USE WAREHOUSE AI_SUMMIT_WH;
+
+-- API integration y Git repository (necesarios si se ejecuta este archivo directamente)
+CREATE OR REPLACE API INTEGRATION github_ai_summit_int
+  API_PROVIDER = git_https_api
+  API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-jparrado')
+  ENABLED = TRUE
+  ALLOWED_AUTHENTICATION_SECRETS = ();
+
+CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
+  API_INTEGRATION = github_ai_summit_int
+  ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
+
+ALTER GIT REPOSITORY ai_summit_repo FETCH;
 
 -- ---------------------------------------------------------------------
 -- 1. Stages internos para imágenes, documentos y audio
