@@ -55,7 +55,6 @@ def editable_sql(key: str, default_sql: str, height: int = 200) -> str:
 
     edited = st.text_area(
         "SQL editable",
-        value=st.session_state[state_key],
         key=state_key,
         height=height,
         label_visibility="collapsed",
