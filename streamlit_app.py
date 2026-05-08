@@ -559,7 +559,7 @@ with tab6:
     sql_filter_default = """SELECT file_name, sentimiento, LEFT(transcripcion, 200) AS preview
 FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES
 WHERE AI_FILTER(
-  PROMPT('La siguiente transcripcion describe a un cliente molesto o con un problema sin resolver: {0}', transcripcion)
+  PROMPT('En la siguiente transcripcion de una llamada al servicio al cliente, el cliente esta molesto, frustrado o tiene un problema sin resolver? Responde TRUE solo si el cliente expresa insatisfaccion, queja o problema activo. Transcripcion: {0}', transcripcion)
 );"""
     sql_filter = editable_sql("ai_filter", sql_filter_default, height=160)
     if run_query_buttons("ai_filter"):
@@ -576,7 +576,7 @@ WHERE AI_FILTER(
     )
     sql_redact_default = """SELECT
   file_name,
-  AI_REDACT(LEFT(content, 1500), ['NAME', 'PHONE_NUMBER', 'EMAIL_ADDRESS', 'ADDRESS', 'ID_NUMBER']) AS contenido_anonimizado
+  AI_REDACT(LEFT(content, 1500), ['NAME', 'NATIONAL_ID', 'ADDRESS']) AS contenido_anonimizado
 FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
     sql_redact = editable_sql("ai_redact", sql_redact_default, height=140)
     if run_query_buttons("ai_redact"):
