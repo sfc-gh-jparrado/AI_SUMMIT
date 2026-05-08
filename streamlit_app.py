@@ -650,6 +650,17 @@ FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
     df_funcs = _pd.DataFrame(mas_funciones, columns=["Funcion", "Que hace"])
     st.dataframe(df_funcs, use_container_width=True, hide_index=True)
 
+    st.markdown(
+        "**Modelos disponibles para `AI_COMPLETE`:** Claude (Sonnet 4, Opus 4, Haiku), "
+        "GPT-5, GPT-5-mini, GPT-4.1, Llama 3.1/3.3 (8b, 70b, 405b), Mistral Large 2, "
+        "Mixtral 8x7b, DeepSeek R1, Gemini 3.1 Pro y mas."
+    )
+    st.link_button(
+        "Ver el catalogo completo en la documentacion oficial",
+        "https://docs.snowflake.com/en/user-guide/snowflake-cortex/aisql#regional-availability",
+        icon=":material/open_in_new:",
+    )
+
     st.info(
         "**Insight competitivo:** todas estas funciones son **SQL plano** - no hay "
         "infraestructura, ni notebooks, ni mover datos.\n\n**Imagina procesar** filtros "
