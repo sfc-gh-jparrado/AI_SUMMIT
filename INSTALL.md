@@ -34,7 +34,7 @@ CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
   ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
 
 ALTER GIT REPOSITORY ai_summit_repo FETCH;
-EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/bootstrap.sql;
+EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
 ```
 
 ## Verificación

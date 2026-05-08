@@ -24,7 +24,7 @@ CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
   API_INTEGRATION = github_ai_summit_int
   ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
 ALTER GIT REPOSITORY ai_summit_repo FETCH;
-EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/bootstrap.sql;
+EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
 ```
 
 Tarda ~75 segundos. Ver [`INSTALL.md`](./INSTALL.md) para detalles.
@@ -41,9 +41,8 @@ Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con ro
 
 | Archivo | Descripción |
 |---|---|
-| `bootstrap.sql` | Punto de entrada — ejecútalo y listo |
-| `setup.sql` | Crea tablas, semantic view, search, agente, notebook y **Streamlit App** (lo invoca bootstrap) |
-| `streamlit_app.py` | UI guiada del Workshop (5 ejercicios) — **recomendada** |
+| `setup.sql` | **Instalador unico** - copia su contenido en un Worksheet y ejecutalo (Run All) |
+| `streamlit_app.py` | UI guiada del Workshop (6 secciones) — **recomendada** |
 | `notebook_ai_summit.ipynb` | 5 ejercicios del Workshop (alternativa al Streamlit) |
 | `prompts_cortex_code.md` | Prompts listos para Cortex Code |
 | `INSTALL.md` | Guía de instalación detallada |

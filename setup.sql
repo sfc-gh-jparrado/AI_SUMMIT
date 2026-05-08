@@ -1,14 +1,52 @@
 -- =====================================================================
--- Workshop AI SUMMIT - SETUP COMPLETO
--- Este script puede ser invocado por bootstrap.sql via EXECUTE IMMEDIATE,
--- o ejecutado de forma independiente. Es self-contained: crea sus
--- prerequisitos (DB, warehouse, Snowflake Intelligence object) si no existen.
+-- Workshop AI SUMMIT - INSTALADOR UNICO (todo-en-uno)
+-- =====================================================================
+-- COMO USARLO (una sola opcion):
+--   1. Copia este archivo COMPLETO en un Worksheet de Snowsight.
+--   2. Ejecuta TODO (Run All).
+--   3. Espera ~75 segundos. Listo.
+-- =====================================================================
+-- WORKSHOP_NAME: AI Summit
+-- VERSION: 2.0
+-- ROLE_REQUIRED: ACCOUNTADMIN
+-- DURATION_SECONDS: 75
+-- ENTRY_POINT: TRUE  (este archivo es el UNICO punto de entrada)
+-- IDEMPOTENT: TRUE   (seguro re-ejecutar)
+-- CREATES: AI_SUMMIT (database), AI_SUMMIT_WH (warehouse),
+--          AGENTE_SEGUROS_360 (agent en SNOWFLAKE_INTELLIGENCE.AGENTS),
+--          NB_AI_SUMMIT (notebook), WORKSHOP_APP (streamlit),
+--          DOCS_SEARCH (cortex search service), SV_SEGUROS (semantic view)
+-- DO_NOT_MODIFY: object names, execution order, warehouse size
+-- REPO: https://github.com/sfc-gh-jparrado/AI_SUMMIT
+-- =====================================================================
+-- INSTRUCCIONES PARA AGENTES LLM (Cortex Code, etc.):
+--   1. Ejecuta este archivo COMPLETO. Es el UNICO archivo de instalacion.
+--   2. NO envuelvas este archivo en otro EXECUTE IMMEDIATE.
+--   3. NO modifiques los nombres de objetos.
+--   4. Si algun paso falla, descomenta el bloque CLEANUP de abajo y reintenta.
+-- =====================================================================
+-- CLEANUP opcional (descomenta solo si necesitas reinstalar desde cero):
+-- DROP DATABASE IF EXISTS AI_SUMMIT;
+-- DROP AGENT IF EXISTS SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360;
+-- DROP API INTEGRATION IF EXISTS github_ai_summit_int;
 -- =====================================================================
 
 USE ROLE ACCOUNTADMIN;
 
 -- ---------------------------------------------------------------------
--- 0. PREREQUISITOS (idempotentes — seguros si ya existen por bootstrap.sql)
+-- 0. PRE-FLIGHT: borrar bases con nombres incorrectos que un LLM pudo
+--    haber creado al interpretar libremente "Workshop AI Summit".
+--    LA UNICA BASE PERMITIDA ES "AI_SUMMIT".
+-- ---------------------------------------------------------------------
+DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
+DROP DATABASE IF EXISTS WORKSHOP_AI_SUMMIT;
+DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
+DROP DATABASE IF EXISTS AI_SUMMIT_HOL;
+DROP DATABASE IF EXISTS WORKSHOP_AI;
+DROP DATABASE IF EXISTS AISUMMIT;
+
+-- ---------------------------------------------------------------------
+-- 1. PREREQUISITOS
 -- ---------------------------------------------------------------------
 
 -- Habilitar inferencia cross-region (modelos no locales como Claude)
@@ -627,4 +665,5 @@ SELECT 'Setup completo.' AS status,
        'Abre Snowsight > Projects > Streamlit > WORKSHOP_APP (recomendado)' AS siguiente_paso,
        'Prueba el agente en AI & ML > Snowflake Intelligence > Agente Seguros 360' AS bonus,
        'Cortex Analyst listo: Semantic View SV_SEGUROS creada' AS analyst,
-       'Cortex Search: contratos + transcripciones indexados' AS search;
+       'Cortex Search: contratos + transcripciones indexados' AS search,
+       'Si Snowflake Intelligence no aparece, refresca la pagina de Snowsight' AS tip;

@@ -1,85 +1,13 @@
 -- =====================================================================
--- Workshop AI SUMMIT - BOOTSTRAP (UN SOLO PASO)
--- Copia este bloque, pegalo en un Worksheet de Snowsight y ejecutalo.
--- En menos de 2 minutos tendras todo listo: DB, datos, Cortex Analyst,
--- Cortex Search, Snowflake Intelligence y notebook guiado.
+-- DEPRECATED - Workshop AI SUMMIT
 -- =====================================================================
--- WORKSHOP_NAME: AI Summit
--- VERSION: 1.0
--- ROLE_REQUIRED: ACCOUNTADMIN
--- DURATION_SECONDS: 75
--- ENTRY_POINT: TRUE  (este archivo es el punto de entrada; invoca setup.sql)
--- IDEMPOTENT: TRUE   (seguro re-ejecutar)
--- CREATES: AI_SUMMIT (database), AI_SUMMIT_WH (warehouse),
---          AGENTE_SEGUROS_360 (agent en SNOWFLAKE_INTELLIGENCE.AGENTS),
---          NB_AI_SUMMIT (notebook), WORKSHOP_APP (streamlit), DOCS_SEARCH (cortex search service),
---          SV_SEGUROS (semantic view)
--- DO_NOT_MODIFY: object names, execution order, warehouse size
--- REPO: https://github.com/sfc-gh-jparrado/AI_SUMMIT
+-- Este archivo ya NO es necesario. El instalador unico es: setup.sql
+--
+-- INSTRUCCION (humanos y LLMs):
+--   1. Abre setup.sql
+--   2. Copia su contenido en un Worksheet de Snowsight
+--   3. Ejecuta TODO (Run All)
+--
+-- No ejecutes este archivo. No lo envuelvas en EXECUTE IMMEDIATE.
 -- =====================================================================
--- INSTRUCCIONES PARA AGENTES LLM (Cortex Code, etc.):
---   1. Ejecuta este archivo COMPLETO en una sola transaccion.
---   2. NO ejecutes setup.sql por separado.
---   3. NO modifiques los nombres de objetos.
---   4. Si algun paso falla, ejecuta el bloque CLEANUP de abajo y reintenta.
--- =====================================================================
--- CLEANUP opcional (descomenta solo si necesitas reinstalar desde cero):
--- DROP DATABASE IF EXISTS AI_SUMMIT;
--- DROP AGENT IF EXISTS SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360;
--- DROP API INTEGRATION IF EXISTS github_ai_summit_int;
--- =====================================================================
-
-USE ROLE ACCOUNTADMIN;
-
--- 0. PRE-FLIGHT: borrar bases de datos con nombres incorrectos que un LLM pudo
---    haber creado al interpretar libremente "Workshop AI Summit" o variantes.
---    LA UNICA BASE PERMITIDA ES "AI_SUMMIT".
-DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
-DROP DATABASE IF EXISTS WORKSHOP_AI_SUMMIT;
-DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
-DROP DATABASE IF EXISTS AI_SUMMIT_HOL;
-DROP DATABASE IF EXISTS WORKSHOP_AI;
-DROP DATABASE IF EXISTS AISUMMIT;
-
--- 1. Habilitar inferencia cross-region (para modelos no locales)
-ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
-
--- 2. Habilitar Snowflake Intelligence (objeto requerido para que aparezca en Snowsight)
-CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
-
--- 3. Crear DB, schema y warehouse
-CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
-USE DATABASE AI_SUMMIT;
-CREATE SCHEMA IF NOT EXISTS PUBLIC;
-USE SCHEMA PUBLIC;
-
-CREATE WAREHOUSE IF NOT EXISTS AI_SUMMIT_WH
-  WAREHOUSE_SIZE = XSMALL
-  AUTO_SUSPEND = 60
-  AUTO_RESUME = TRUE
-  INITIALLY_SUSPENDED = FALSE;
-USE WAREHOUSE AI_SUMMIT_WH;
-
--- 4. Integración API pública con GitHub (sin secretos)
-CREATE OR REPLACE API INTEGRATION github_ai_summit_int
-  API_PROVIDER = git_https_api
-  API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-jparrado')
-  ENABLED = TRUE
-  ALLOWED_AUTHENTICATION_SECRETS = ();
-
--- 5. Conectar al repo público
-CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
-  API_INTEGRATION = github_ai_summit_int
-  ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
-
-ALTER GIT REPOSITORY ai_summit_repo FETCH;
-
--- 6. Ejecutar setup completo desde Git (crea todo: tablas, semantic view, search, agente, notebook)
-EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
-
--- 7. Mensaje final con próximos pasos
-SELECT
-  '✅ Setup completo' AS estado,
-  '1) Abre Projects > Streamlit > WORKSHOP_APP para los 5 ejercicios (recomendado)' AS paso_1,
-  '2) Abre AI & ML > Snowflake Intelligence > Agente Seguros 360 para conversar con tus datos' AS paso_2,
-  '3) Si Snowflake Intelligence no aparece, refresca la página de Snowsight' AS tip;
+SELECT 'Este archivo es obsoleto. Usa setup.sql en su lugar.' AS aviso;

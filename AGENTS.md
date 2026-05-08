@@ -23,7 +23,7 @@ DROP DATABASE IF EXISTS AISUMMIT;
 DROP DATABASE IF EXISTS WORKSHOP;
 ```
 
-**Rule:** if you (LLM) feel tempted to create a database with any name **other than `AI_SUMMIT`**, STOP. Use `AI_SUMMIT` and only `AI_SUMMIT`. The bootstrap script below creates it correctly.
+**Rule:** if you (LLM) feel tempted to create a database with any name **other than `AI_SUMMIT`**, STOP. Use `AI_SUMMIT` and only `AI_SUMMIT`. The `setup.sql` script below creates it correctly.
 
 ## Authoritative install procedure
 
@@ -66,10 +66,10 @@ CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
   ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
 
 ALTER GIT REPOSITORY ai_summit_repo FETCH;
-EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/bootstrap.sql;
+EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
 ```
 
-**Reference:** the actual `bootstrap.sql` at the repo root contains the same logic plus the call to `setup.sql`. Use either approach — both produce the SAME result.
+**Reference:** the actual `setup.sql` at the repo root is the SINGLE entry point. It is self-contained: API integration, GIT repo, FETCH, and all object creation in one file.
 
 ## Hard-coded names (DO NOT modify)
 
@@ -97,11 +97,11 @@ SELECT COUNT(*) FROM AI_SUMMIT.PUBLIC.POLIZAS;  -- expect 30
 
 - ❌ Do NOT create any database with a name OTHER than `AI_SUMMIT`. No `AI_SUMMIT_WORKSHOP`, no `WORKSHOP_AI_SUMMIT`, no `HOL_AI_SUMMIT`. If you (LLM) feel a different name fits better, **you are wrong** — use `AI_SUMMIT`.
 - ❌ Do NOT translate "Workshop AI Summit" into a database identifier. The repo name `AI_SUMMIT` is the database name.
-- ❌ Do NOT generate alternative SQL "from scratch". Always run the script above or `bootstrap.sql` from the repo.
+- ❌ Do NOT generate alternative SQL "from scratch". Always run the script above or `setup.sql` from the repo.
 - ❌ Do NOT change `WAREHOUSE_SIZE` from `XSMALL`.
 - ❌ Do NOT skip `ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION'`.
 - ❌ Do NOT create the agent in `AI_SUMMIT.PUBLIC` — must be in `SNOWFLAKE_INTELLIGENCE.AGENTS`.
-- ❌ Do NOT execute `setup.sql` standalone — `bootstrap.sql` invokes it.
+- DO execute `setup.sql` directly. There is no other installer. Do NOT wrap it in another `EXECUTE IMMEDIATE`.
 
 ## Self-check before responding to user
 

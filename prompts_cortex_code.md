@@ -11,13 +11,13 @@ Elige el nivel de control que prefieras. Pega en un Worksheet/Workspace nuevo y 
 ### 🥇 Opción corta (1 línea, recomendada — repo dedicado)
 
 ```
-Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con rol ACCOUNTADMIN. La UNICA base de datos permitida es AI_SUMMIT (no AI_SUMMIT_WORKSHOP, no WORKSHOP_AI_SUMMIT, no HOL_AI_SUMMIT). Antes de cualquier paso, ejecuta DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP, WORKSHOP_AI_SUMMIT, HOL_AI_SUMMIT. Luego ejecuta bootstrap.sql del repo tal cual sin modificar nombres.
+Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con rol ACCOUNTADMIN. La UNICA base de datos permitida es AI_SUMMIT (no AI_SUMMIT_WORKSHOP, no WORKSHOP_AI_SUMMIT, no HOL_AI_SUMMIT). Antes de cualquier paso, ejecuta DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP, WORKSHOP_AI_SUMMIT, HOL_AI_SUMMIT. Luego ejecuta setup.sql del repo tal cual sin modificar nombres.
 ```
 
 ### 🥈 Opción media (apunta directo al script)
 
 ```
-Conecta el repo público https://github.com/sfc-gh-jparrado/AI_SUMMIT.git con una API integration y ejecuta bootstrap.sql usando rol ACCOUNTADMIN. Confirma al final que existen la base AI_SUMMIT, el agente AGENTE_SEGUROS_360 y el notebook NB_AI_SUMMIT.
+Conecta el repo público https://github.com/sfc-gh-jparrado/AI_SUMMIT.git con una API integration y ejecuta setup.sql usando rol ACCOUNTADMIN. Confirma al final que existen la base AI_SUMMIT, el agente AGENTE_SEGUROS_360 y el notebook NB_AI_SUMMIT.
 ```
 
 ### 🥉 Opción larga (SQL embebido, máxima confiabilidad para demo en vivo)
@@ -42,7 +42,7 @@ CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
   API_INTEGRATION = github_ai_summit_int
   ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
 ALTER GIT REPOSITORY ai_summit_repo FETCH;
-EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/bootstrap.sql;
+EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
 
 Cuando termine confirma que se crearon: la base AI_SUMMIT, el agente AGENTE_SEGUROS_360 y el notebook NB_AI_SUMMIT.
 ```
