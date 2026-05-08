@@ -50,7 +50,11 @@ def editable_sql(key: str, default_sql: str, height: int = 200) -> str:
         st.caption(":blue[SQL editable] - modificalo libremente. Si rompes algo, usa Restaurar.")
     with cols[1]:
         st.button(
-            "Restaurar", key=f"reset_{key}", on_click=_request_reset, use_container_width=True
+            "Restaurar Query",
+            key=f"reset_{key}",
+            on_click=_request_reset,
+            use_container_width=True,
+            icon=":material/restart_alt:",
         )
 
     edited = st.text_area(
@@ -221,7 +225,7 @@ with tab1:
 ) AS analisis_siniestro;"""
     sql_choque = editable_sql("choque", sql_choque_default, height=200)
 
-    if st.button("Analizar siniestro", key="btn_choque", type="primary"):
+    if st.button("Ejecutar Query", key="btn_choque", type="primary"):
         df = safe_run(sql_choque, "Claude-4 esta analizando la imagen...")
         if df is not None:
             st.success("Analisis completado")
@@ -244,7 +248,7 @@ with tab1:
 ):response::VARIANT AS datos_cedula;"""
     sql_cedula = editable_sql("cedula", sql_cedula_default, height=140)
 
-    if st.button("Extraer datos de identidad", key="btn_cedula", type="primary"):
+    if st.button("Ejecutar Query", key="btn_cedula", type="primary"):
         df = safe_run(sql_cedula, "Extrayendo campos...")
         if df is not None:
             st.success("Extraccion completada")
@@ -296,7 +300,7 @@ with tab2:
 FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
     sql_extract = editable_sql("extract_docs", sql_extract_default, height=200)
 
-    if st.button("Extraer campos de contratos", key="btn_extract", type="primary"):
+    if st.button("Ejecutar Query", key="btn_extract", type="primary"):
         df = safe_run(sql_extract, "Extrayendo campos...")
         if df is not None:
             for _, row in df.iterrows():
@@ -375,7 +379,7 @@ with tab3:
 FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
     sql_coach = editable_sql("coach", sql_coach_default, height=240)
 
-    if st.button("Generar coaching", key="btn_coach", type="primary"):
+    if st.button("Ejecutar Query", key="btn_coach", type="primary"):
         df = safe_run(sql_coach, "Generando recomendaciones...")
         if df is not None:
             for _, row in df.iterrows():
@@ -453,7 +457,7 @@ GROUP BY region
 ORDER BY total_primas DESC;"""
     sql_region = editable_sql("region", sql_region_default, height=140)
 
-    if st.button("Ejecutar query", key="btn_region", type="primary"):
+    if st.button("Ejecutar Query", key="btn_region", type="primary"):
         df = safe_run(sql_region)
         if df is not None:
             st.dataframe(df, use_container_width=True, hide_index=True)
@@ -470,7 +474,7 @@ ORDER BY total_primas DESC;"""
     )
     sql_search = editable_sql("search", sql_search_default, height=140)
 
-    if st.button("Buscar", key="btn_search", type="primary"):
+    if st.button("Ejecutar Query", key="btn_search", type="primary"):
         sql = sql_search.replace("<TU_BUSQUEDA>", query.replace("'", ""))
         df = safe_run(sql, "Buscando...")
         if df is not None:
@@ -526,7 +530,7 @@ WHERE AI_FILTER(
   PROMPT('La siguiente transcripcion describe a un cliente molesto o con un problema sin resolver: {0}', transcripcion)
 );"""
     sql_filter = editable_sql("ai_filter", sql_filter_default, height=160)
-    if st.button("Ejecutar AI_FILTER", key="btn_filter", type="primary"):
+    if st.button("Ejecutar Query", key="btn_filter", type="primary"):
         df = safe_run(sql_filter, "Filtrando con AI...")
         if df is not None:
             st.dataframe(df, use_container_width=True, hide_index=True)
@@ -543,7 +547,7 @@ WHERE AI_FILTER(
   AI_REDACT(LEFT(content, 1500), ['NAME', 'PHONE_NUMBER', 'EMAIL_ADDRESS', 'ADDRESS', 'ID_NUMBER']) AS contenido_anonimizado
 FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
     sql_redact = editable_sql("ai_redact", sql_redact_default, height=140)
-    if st.button("Ejecutar AI_REDACT", key="btn_redact", type="primary"):
+    if st.button("Ejecutar Query", key="btn_redact", type="primary"):
         df = safe_run(sql_redact, "Anonimizando...")
         if df is not None:
             for _, row in df.iterrows():
@@ -563,7 +567,7 @@ FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
 ) AS resumen_consolidado
 FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
     sql_agg = editable_sql("ai_agg", sql_agg_default, height=160)
-    if st.button("Ejecutar AI_AGG", key="btn_agg", type="primary"):
+    if st.button("Ejecutar Query", key="btn_agg", type="primary"):
         df = safe_run(sql_agg, "Consolidando insights...")
         if df is not None:
             st.write(df.iloc[0]["RESUMEN_CONSOLIDADO"])
@@ -583,7 +587,7 @@ FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
   ):labels[0]::STRING AS tipo_contrato
 FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
     sql_classify = editable_sql("ai_classify", sql_classify_default, height=160)
-    if st.button("Ejecutar AI_CLASSIFY", key="btn_classify", type="primary"):
+    if st.button("Ejecutar Query", key="btn_classify", type="primary"):
         df = safe_run(sql_classify, "Clasificando...")
         if df is not None:
             st.dataframe(df, use_container_width=True, hide_index=True)
