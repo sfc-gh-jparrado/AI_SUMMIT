@@ -1,6 +1,6 @@
 # Guión de Prompts para Cortex Code (Workshop AI Summit)
 
-> **Cómo usarlo:** Abre **Cortex Code** en Snowsight (atajo `Cmd/Ctrl + I` o icono de chispa en el panel lateral). Asegúrate de estar en el contexto `HOL_AI_SUMMIT.PUBLIC` con el warehouse `HOL_WH`. Pega cada prompt y deja que Cortex Code genere el SQL.
+> **Cómo usarlo:** Abre **Cortex Code** en Snowsight (atajo `Cmd/Ctrl + I` o icono de chispa en el panel lateral). Asegúrate de estar en el contexto `AI_SUMMIT.PUBLIC` con el warehouse `AI_SUMMIT_WH`. Pega cada prompt y deja que Cortex Code genere el SQL.
 
 ---
 
@@ -17,7 +17,7 @@ Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con ro
 ### 🥈 Opción media (apunta directo al script)
 
 ```
-Conecta el repo público https://github.com/sfc-gh-jparrado/AI_SUMMIT.git con una API integration y ejecuta bootstrap.sql usando rol ACCOUNTADMIN. Confirma al final que existen la base HOL_AI_SUMMIT, el agente AGENTE_SEGUROS_360 y el notebook NB_HOL_AI_SUMMIT.
+Conecta el repo público https://github.com/sfc-gh-jparrado/AI_SUMMIT.git con una API integration y ejecuta bootstrap.sql usando rol ACCOUNTADMIN. Confirma al final que existen la base AI_SUMMIT, el agente AGENTE_SEGUROS_360 y el notebook NB_AI_SUMMIT.
 ```
 
 ### 🥉 Opción larga (SQL embebido, máxima confiabilidad para demo en vivo)
@@ -28,23 +28,23 @@ Despliega el Workshop AI Summit ejecutando este script:
 USE ROLE ACCOUNTADMIN;
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
 CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
-CREATE DATABASE IF NOT EXISTS HOL_AI_SUMMIT;
-USE DATABASE HOL_AI_SUMMIT;
+CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
+USE DATABASE AI_SUMMIT;
 USE SCHEMA PUBLIC;
-CREATE WAREHOUSE IF NOT EXISTS HOL_WH WAREHOUSE_SIZE=XSMALL AUTO_SUSPEND=60 INITIALLY_SUSPENDED=FALSE;
-USE WAREHOUSE HOL_WH;
-CREATE OR REPLACE API INTEGRATION github_hol_int
+CREATE WAREHOUSE IF NOT EXISTS AI_SUMMIT_WH WAREHOUSE_SIZE=XSMALL AUTO_SUSPEND=60 INITIALLY_SUSPENDED=FALSE;
+USE WAREHOUSE AI_SUMMIT_WH;
+CREATE OR REPLACE API INTEGRATION github_ai_summit_int
   API_PROVIDER = git_https_api
   API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-jparrado')
   ENABLED = TRUE
   ALLOWED_AUTHENTICATION_SECRETS = ();
-CREATE OR REPLACE GIT REPOSITORY hol_repo
-  API_INTEGRATION = github_hol_int
+CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
+  API_INTEGRATION = github_ai_summit_int
   ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
-ALTER GIT REPOSITORY hol_repo FETCH;
-EXECUTE IMMEDIATE FROM @hol_repo/branches/main/bootstrap.sql;
+ALTER GIT REPOSITORY ai_summit_repo FETCH;
+EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/bootstrap.sql;
 
-Cuando termine confirma que se crearon: la base HOL_AI_SUMMIT, el agente AGENTE_SEGUROS_360 y el notebook NB_HOL_AI_SUMMIT.
+Cuando termine confirma que se crearon: la base AI_SUMMIT, el agente AGENTE_SEGUROS_360 y el notebook NB_AI_SUMMIT.
 ```
 
 > 💡 **Recomendación para Workshop con personas de negocio:** usa la **Opción larga**. Es 100% determinística — Cortex Code solo lo ejecuta, no lo reinterpreta.
@@ -98,7 +98,7 @@ Genérame un SELECT que llame a AI_COMPLETE con claude-4-sonnet y le pase como c
 ## Prompt 4 - Streamlit dashboard
 
 ```
-Crea una aplicación Streamlit in Snowflake llamada DASHBOARD_HOL en el schema HOL_AI_SUMMIT.PUBLIC con:
+Crea una aplicación Streamlit in Snowflake llamada DASHBOARD_HOL en el schema AI_SUMMIT.PUBLIC con:
 - Una métrica con el total de archivos procesados (sumando DOCS_PARSED + TRANSCRIPCIONES + DIRECTORY(@IMAGENES))
 - Un gráfico de barras con el sentimiento de las llamadas (tabla TRANSCRIPCIONES)
 - Un campo de chat que invoque AI_COMPLETE con la pregunta del usuario y contexto de V_HOL_360
@@ -110,7 +110,7 @@ Crea una aplicación Streamlit in Snowflake llamada DASHBOARD_HOL en el schema H
 ## Prompt 5 - Crear Semantic View (Cortex Analyst)
 
 ```
-Crea una semantic view llamada SV_SEGUROS_DEMO sobre las tablas POLIZAS, CLIENTES y RECLAMACIONES en HOL_AI_SUMMIT.PUBLIC. Incluye dimensiones para tipo_poliza, región, vendedor, segmento de cliente y tipo de siniestro. Define métricas para total de primas, número de pólizas, monto total de reclamaciones aprobadas y tasa de aprobación. Agrega time_dimensions sobre las fechas y relaciones entre las tablas usando el campo cliente/nombre. Incluye verified_queries para: top vendedores por primas, reclamaciones pendientes, y distribución de pólizas por región.
+Crea una semantic view llamada SV_SEGUROS_DEMO sobre las tablas POLIZAS, CLIENTES y RECLAMACIONES en AI_SUMMIT.PUBLIC. Incluye dimensiones para tipo_poliza, región, vendedor, segmento de cliente y tipo de siniestro. Define métricas para total de primas, número de pólizas, monto total de reclamaciones aprobadas y tasa de aprobación. Agrega time_dimensions sobre las fechas y relaciones entre las tablas usando el campo cliente/nombre. Incluye verified_queries para: top vendedores por primas, reclamaciones pendientes, y distribución de pólizas por región.
 ```
 
 ---
@@ -118,7 +118,7 @@ Crea una semantic view llamada SV_SEGUROS_DEMO sobre las tablas POLIZAS, CLIENTE
 ## Prompt 6 - Crear Cortex Search Service
 
 ```
-Crea un Cortex Search Service llamado SEARCH_UNIFICADO sobre la tabla BASE_CONOCIMIENTO en HOL_AI_SUMMIT.PUBLIC. La columna de búsqueda principal es 'contenido', los atributos son 'tipo_documento' y 'file_name'. Usa el warehouse HOL_WH, target_lag de 1 hora, y el embedding model snowflake-arctic-embed-l-v2.0.
+Crea un Cortex Search Service llamado SEARCH_UNIFICADO sobre la tabla BASE_CONOCIMIENTO en AI_SUMMIT.PUBLIC. La columna de búsqueda principal es 'contenido', los atributos son 'tipo_documento' y 'file_name'. Usa el warehouse AI_SUMMIT_WH, target_lag de 1 hora, y el embedding model snowflake-arctic-embed-l-v2.0.
 ```
 
 ---
@@ -126,7 +126,7 @@ Crea un Cortex Search Service llamado SEARCH_UNIFICADO sobre la tabla BASE_CONOC
 ## Prompt 7 - Crear Agente (Snowflake Intelligence)
 
 ```
-Crea un agente llamado AGENTE_SEGUROS_DEMO en HOL_AI_SUMMIT.PUBLIC que combine:
+Crea un agente llamado AGENTE_SEGUROS_DEMO en AI_SUMMIT.PUBLIC que combine:
 1. Una herramienta cortex_analyst_text_to_sql conectada a la semantic view SV_SEGUROS para consultar datos de pólizas, clientes y reclamaciones
 2. Una herramienta cortex_search conectada al servicio DOCS_SEARCH para buscar en contratos y transcripciones de llamadas
 3. Una herramienta data_to_chart para generar gráficos

@@ -1,14 +1,14 @@
 -- =====================================================================
 -- Workshop AI SUMMIT - SETUP COMPLETO
--- Este script es invocado por bootstrap.sql via EXECUTE IMMEDIATE FROM @hol_repo.
+-- Este script es invocado por bootstrap.sql via EXECUTE IMMEDIATE FROM @ai_summit_repo.
 -- Crea toda la infraestructura del Workshop: stages, datos, tablas sintéticas,
 -- Cortex Search, Semantic View, Agente con Snowflake Intelligence y notebook.
 -- =====================================================================
 
 USE ROLE ACCOUNTADMIN;
-USE DATABASE HOL_AI_SUMMIT;
+USE DATABASE AI_SUMMIT;
 USE SCHEMA PUBLIC;
-USE WAREHOUSE HOL_WH;
+USE WAREHOUSE AI_SUMMIT_WH;
 
 -- ---------------------------------------------------------------------
 -- 1. Stages internos para imágenes, documentos y audio
@@ -29,13 +29,13 @@ CREATE OR REPLACE STAGE AUDIO
 -- 2. Copiar archivos desde el repo Git al stage interno
 -- ---------------------------------------------------------------------
 COPY FILES INTO @IMAGENES
-  FROM @hol_repo/branches/main/datasets/imagenes/;
+  FROM @ai_summit_repo/branches/main/datasets/imagenes/;
 
 COPY FILES INTO @DOCUMENTOS
-  FROM @hol_repo/branches/main/datasets/documentos/;
+  FROM @ai_summit_repo/branches/main/datasets/documentos/;
 
 COPY FILES INTO @AUDIO
-  FROM @hol_repo/branches/main/datasets/audio/;
+  FROM @ai_summit_repo/branches/main/datasets/audio/;
 
 ALTER STAGE IMAGENES REFRESH;
 ALTER STAGE DOCUMENTOS REFRESH;
@@ -52,7 +52,7 @@ CREATE OR REPLACE STAGE PRECOMPUTED
   ENCRYPTION = (TYPE = 'SNOWFLAKE_SSE');
 
 COPY FILES INTO @PRECOMPUTED
-  FROM @hol_repo/branches/main/datasets/precomputed/;
+  FROM @ai_summit_repo/branches/main/datasets/precomputed/;
 
 CREATE OR REPLACE FILE FORMAT FF_CSV_PRECOMPUTED
   TYPE = CSV
@@ -194,7 +194,7 @@ SELECT file_name, 'Transcripción llamada', transcripcion FROM TRANSCRIPCIONES;
 CREATE OR REPLACE CORTEX SEARCH SERVICE DOCS_SEARCH
   ON contenido
   ATTRIBUTES tipo_documento, file_name
-  WAREHOUSE = HOL_WH
+  WAREHOUSE = AI_SUMMIT_WH
   TARGET_LAG = '1 hour'
   EMBEDDING_MODEL = 'snowflake-arctic-embed-l-v2.0'
 AS (SELECT contenido, tipo_documento, file_name FROM BASE_CONOCIMIENTO);
@@ -202,7 +202,7 @@ AS (SELECT contenido, tipo_documento, file_name FROM BASE_CONOCIMIENTO);
 -- ---------------------------------------------------------------------
 -- 9. Semantic View para Cortex Analyst (datos estructurados)
 -- ---------------------------------------------------------------------
-CALL SYSTEM$CREATE_SEMANTIC_VIEW_FROM_YAML('HOL_AI_SUMMIT.PUBLIC', $$
+CALL SYSTEM$CREATE_SEMANTIC_VIEW_FROM_YAML('AI_SUMMIT.PUBLIC', $$
 name: SV_SEGUROS
 description: "Vista semántica de una empresa de seguros e inmobiliaria. Incluye pólizas vendidas, clientes y reclamaciones por siniestros."
 
@@ -210,7 +210,7 @@ tables:
   - name: polizas
     description: "Pólizas de seguros vendidas (hogar, vehicular, vida)"
     base_table:
-      database: HOL_AI_SUMMIT
+      database: AI_SUMMIT
       schema: PUBLIC
       table: POLIZAS
     primary_key:
@@ -307,7 +307,7 @@ tables:
   - name: clientes
     description: "Clientes registrados en la aseguradora"
     base_table:
-      database: HOL_AI_SUMMIT
+      database: AI_SUMMIT
       schema: PUBLIC
       table: CLIENTES
     primary_key:
@@ -370,7 +370,7 @@ tables:
   - name: reclamaciones
     description: "Reclamaciones y siniestros reportados por clientes"
     base_table:
-      database: HOL_AI_SUMMIT
+      database: AI_SUMMIT
       schema: PUBLIC
       table: RECLAMACIONES
     primary_key:
@@ -461,7 +461,7 @@ verified_queries:
     use_as_onboarding_question: true
     sql: |
       SELECT region, SUM(prima_mensual) AS total_primas, COUNT(*) AS num_polizas
-      FROM HOL_AI_SUMMIT.PUBLIC.POLIZAS
+      FROM AI_SUMMIT.PUBLIC.POLIZAS
       WHERE estado = 'Activa'
       GROUP BY region
       ORDER BY total_primas DESC
@@ -470,7 +470,7 @@ verified_queries:
     use_as_onboarding_question: true
     sql: |
       SELECT vendedor, COUNT(*) AS polizas_vendidas, SUM(prima_mensual) AS total_primas
-      FROM HOL_AI_SUMMIT.PUBLIC.POLIZAS
+      FROM AI_SUMMIT.PUBLIC.POLIZAS
       WHERE estado = 'Activa'
       GROUP BY vendedor
       ORDER BY total_primas DESC
@@ -479,14 +479,14 @@ verified_queries:
     use_as_onboarding_question: true
     sql: |
       SELECT tipo_siniestro, cliente, monto_reclamado, fecha
-      FROM HOL_AI_SUMMIT.PUBLIC.RECLAMACIONES
+      FROM AI_SUMMIT.PUBLIC.RECLAMACIONES
       WHERE estado = 'En proceso'
       ORDER BY monto_reclamado DESC
   - name: clientes_premium
     question: "¿Cuáles son los clientes premium y VIP?"
     sql: |
       SELECT nombre, segmento, ciudad, polizas_activas, valor_total_primas
-      FROM HOL_AI_SUMMIT.PUBLIC.CLIENTES
+      FROM AI_SUMMIT.PUBLIC.CLIENTES
       WHERE segmento IN ('Premium', 'VIP')
       ORDER BY valor_total_primas DESC
 $$);
@@ -531,10 +531,10 @@ CREATE OR REPLACE AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360
   ],
   "tool_resources": {
     "analizar_datos": {
-      "semantic_view": "HOL_AI_SUMMIT.PUBLIC.SV_SEGUROS"
+      "semantic_view": "AI_SUMMIT.PUBLIC.SV_SEGUROS"
     },
     "buscar_documentos": {
-      "name": "HOL_AI_SUMMIT.PUBLIC.DOCS_SEARCH",
+      "name": "AI_SUMMIT.PUBLIC.DOCS_SEARCH",
       "max_results": 5,
       "id_column": "file_name",
       "title_column": "tipo_documento"
@@ -547,27 +547,27 @@ $$;
 GRANT USAGE ON DATABASE SNOWFLAKE_INTELLIGENCE TO ROLE PUBLIC;
 GRANT USAGE ON SCHEMA SNOWFLAKE_INTELLIGENCE.AGENTS TO ROLE PUBLIC;
 GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360 TO ROLE PUBLIC;
-GRANT USAGE ON DATABASE HOL_AI_SUMMIT TO ROLE PUBLIC;
-GRANT USAGE ON SCHEMA HOL_AI_SUMMIT.PUBLIC TO ROLE PUBLIC;
-GRANT SELECT ON ALL TABLES IN SCHEMA HOL_AI_SUMMIT.PUBLIC TO ROLE PUBLIC;
-GRANT SELECT ON SEMANTIC VIEW HOL_AI_SUMMIT.PUBLIC.SV_SEGUROS TO ROLE PUBLIC;
-GRANT USAGE ON CORTEX SEARCH SERVICE HOL_AI_SUMMIT.PUBLIC.DOCS_SEARCH TO ROLE PUBLIC;
+GRANT USAGE ON DATABASE AI_SUMMIT TO ROLE PUBLIC;
+GRANT USAGE ON SCHEMA AI_SUMMIT.PUBLIC TO ROLE PUBLIC;
+GRANT SELECT ON ALL TABLES IN SCHEMA AI_SUMMIT.PUBLIC TO ROLE PUBLIC;
+GRANT SELECT ON SEMANTIC VIEW AI_SUMMIT.PUBLIC.SV_SEGUROS TO ROLE PUBLIC;
+GRANT USAGE ON CORTEX SEARCH SERVICE AI_SUMMIT.PUBLIC.DOCS_SEARCH TO ROLE PUBLIC;
 
 -- ---------------------------------------------------------------------
 -- 11. Crear el notebook desde el repo Git
 -- ---------------------------------------------------------------------
-CREATE OR REPLACE NOTEBOOK NB_HOL_AI_SUMMIT
-  FROM '@hol_repo/branches/main/'
+CREATE OR REPLACE NOTEBOOK NB_AI_SUMMIT
+  FROM '@ai_summit_repo/branches/main/'
   MAIN_FILE = 'notebook_ai_summit.ipynb'
-  QUERY_WAREHOUSE = HOL_WH;
+  QUERY_WAREHOUSE = AI_SUMMIT_WH;
 
-ALTER NOTEBOOK NB_HOL_AI_SUMMIT ADD LIVE VERSION FROM LAST;
+ALTER NOTEBOOK NB_AI_SUMMIT ADD LIVE VERSION FROM LAST;
 
 -- ---------------------------------------------------------------------
 -- 12. Resumen final
 -- ---------------------------------------------------------------------
 SELECT 'Setup completo.' AS status,
-       'Abre Snowsight > Projects > Notebooks > NB_HOL_AI_SUMMIT' AS siguiente_paso,
+       'Abre Snowsight > Projects > Notebooks > NB_AI_SUMMIT' AS siguiente_paso,
        'Prueba el agente en AI & ML > Snowflake Intelligence > Agente Seguros 360' AS bonus,
        'Cortex Analyst listo: Semantic View SV_SEGUROS creada' AS analyst,
        'Cortex Search: contratos + transcripciones indexados' AS search;
