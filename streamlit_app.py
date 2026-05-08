@@ -117,11 +117,11 @@ st.write("")  # spacer
 tab0, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
     [
         "Bienvenida",
-        "Ej. 1 - Imagenes",
-        "Ej. 2 - Documentos",
-        "Ej. 3 - Audio",
-        "Ej. 4 - Cortex Code",
-        "Ej. 5 - Agente",
+        "Imagenes",
+        "Documentos",
+        "Audio",
+        "Cortex Code",
+        "Agente",
         "Bonus - Mas AI Functions",
     ]
 )
@@ -202,13 +202,13 @@ with tab0:
             st.markdown(desc)
 
     st.info(
-        "Avanza a la pestana **Ej. 1 - Imagenes** para empezar. Cada query es "
+        "Avanza a la pestana **Imagenes** para empezar. Cada query es "
         "editable: si rompes algo, usa el boton **Restaurar**."
     )
 
 # =================================================================== Tab 1
 with tab1:
-    st.subheader("Ejercicio 1 - Imagenes con IA Multimodal")
+    st.subheader("Imagenes con IA Multimodal")
     st.markdown(
         "Usamos `AI_COMPLETE` con **Claude-4 Sonnet** (multimodal) para analizar imagenes "
         "directamente desde un stage. Snowflake las **ve** como un humano."
@@ -275,7 +275,7 @@ with tab1:
 
 # =================================================================== Tab 2
 with tab2:
-    st.subheader("Ejercicio 2 - Documentos a datos estructurados")
+    st.subheader("Documentos a datos estructurados")
     st.markdown(
         "Snowflake procesa **PDF, DOCX, PPTX y mas** sin pre-procesar. "
         "Convertimos contratos legales en datos consumibles."
@@ -327,7 +327,7 @@ FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
 
 # =================================================================== Tab 3
 with tab3:
-    st.subheader("Ejercicio 3 - Audio con AI_TRANSCRIBE + AI_SENTIMENT + Coaching")
+    st.subheader("Audio con AI_TRANSCRIBE + AI_SENTIMENT + Coaching")
     st.markdown(
         "Tomamos llamadas reales, las **transcribimos**, medimos **sentimiento** "
         "y generamos **coaching** para el asesor."
@@ -407,7 +407,7 @@ FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
 
 # =================================================================== Tab 4
 with tab4:
-    st.subheader("Ejercicio 4 - Cortex Code")
+    st.subheader("Cortex Code")
     st.markdown(
         "Para abrir **Cortex Code** haz clic en el **icono de la chispa** ubicado en la "
         "**esquina inferior derecha** de Snowsight. "
@@ -454,7 +454,7 @@ with tab4:
 
 # =================================================================== Tab 5
 with tab5:
-    st.subheader("Ejercicio 5 - Cortex Analyst + Search + Agente")
+    st.subheader("Cortex Analyst + Search + Agente")
     st.markdown(
         "Cerramos con el **Snowflake Intelligence Agent** que combina texto-a-SQL, "
         "busqueda semantica y graficos."
