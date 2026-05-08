@@ -93,10 +93,19 @@ GRANT USAGE ON SCHEMA SNOWFLAKE_INTELLIGENCE.AGENTS TO ROLE PUBLIC;
 GRANT USAGE ON AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360 TO ROLE PUBLIC;
 
 -- ---------------------------------------------------------------------
--- 4. Registrar el agente en el Snowflake Intelligence Object (UI de chat)
+-- 4. Registrar el agente en el Snowflake Intelligence Object (UI de chat).
+--    El DROP previo es idempotente: si el agente no estaba registrado,
+--    silenciamos el error con un bloque EXCEPTION.
 -- ---------------------------------------------------------------------
-ALTER SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT
-  DROP AGENT IF EXISTS SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360;
+EXECUTE IMMEDIATE $$
+BEGIN
+  ALTER SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT
+    DROP AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360;
+EXCEPTION
+  WHEN OTHER THEN
+    RETURN 'agent not previously registered, skipping drop';
+END;
+$$;
 
 ALTER SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT
   ADD AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360;
