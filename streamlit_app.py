@@ -132,15 +132,15 @@ with st.container(border=True):
 st.write("")  # spacer
 
 # =========================================================== tabs
-tab0, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
+tab0, tab1, tab2, tab3, tab6, tab4, tab5 = st.tabs(
     [
         "Bienvenida",
         "Imagenes",
         "Documentos",
         "Audio",
+        "Mas AI Functions",
         "Cortex Code",
         "Agente",
-        "Bonus - Mas AI Functions",
     ]
 )
 
@@ -192,7 +192,7 @@ with tab0:
             "(contratos + transcripciones) y graficos automaticos.",
         ),
         (
-            "Bonus - Mas AI Functions",
+            "Mas AI Functions",
             "Veras **AI_FILTER, AI_REDACT, AI_AGG y AI_CLASSIFY** en accion: filtros "
             "inteligentes, anonimizacion de PII, resumenes consolidados y clasificacion. "
             "Mas una tabla con muchas mas funciones disponibles en SQL.",
@@ -540,9 +540,9 @@ ORDER BY total_primas DESC;"""
         "**El proximo paso es tuyo:** lleva uno de estos casos a tu organizacion esta semana."
     )
 
-# =================================================================== Tab 6 (Bonus)
+# =================================================================== Tab 6 (Mas AI Functions)
 with tab6:
-    st.subheader("Bonus - Mas AI Functions de Snowflake Cortex")
+    st.subheader("Mas AI Functions de Snowflake Cortex")
     st.markdown(
         "Mas alla de `AI_COMPLETE`, `AI_EXTRACT`, `AI_TRANSCRIBE` y `AI_SENTIMENT` "
         "que ya viste, **Snowflake Cortex** trae una bateria de funciones SQL "
