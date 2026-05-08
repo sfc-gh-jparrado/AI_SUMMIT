@@ -377,6 +377,24 @@ with tab3:
         st.error(f"Error: {e}")
 
     st.divider()
+    st.markdown("##### Como se generaron esas transcripciones (AI_TRANSCRIBE)")
+    st.caption(
+        "Las transcripciones que ves arriba se hidrataron en el setup para acelerar el "
+        "workshop. Asi se obtienen en vivo desde el audio crudo:"
+    )
+    sql_transcribe_default = """SELECT
+  AI_TRANSCRIBE(
+    TO_FILE('@AI_SUMMIT.PUBLIC.AUDIO', 'problema-servicio.mp3')
+  ) AS transcripcion;"""
+    sql_transcribe = editable_sql("transcribe", sql_transcribe_default, height=120)
+
+    if run_query_buttons("transcribe"):
+        df = safe_run(sql_transcribe, "Transcribiendo audio...")
+        if df is not None:
+            with st.container(border=True):
+                render_json(df.iloc[0]["TRANSCRIPCION"])
+
+    st.divider()
     st.markdown("##### Generar coaching para el asesor (JSON formateado)")
     sql_coach_default = """SELECT
   file_name,
