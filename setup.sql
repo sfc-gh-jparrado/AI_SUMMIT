@@ -604,10 +604,23 @@ CREATE OR REPLACE NOTEBOOK NB_AI_SUMMIT
 ALTER NOTEBOOK NB_AI_SUMMIT ADD LIVE VERSION FROM LAST;
 
 -- ---------------------------------------------------------------------
+-- 11b. Crear Streamlit-in-Snowflake App (UI principal del Workshop)
+--      Es la forma RECOMENDADA para audiencias de negocio.
+-- ---------------------------------------------------------------------
+CREATE OR REPLACE STREAMLIT WORKSHOP_APP
+  FROM '@ai_summit_repo/branches/main/'
+  MAIN_FILE = 'streamlit_app.py'
+  QUERY_WAREHOUSE = AI_SUMMIT_WH
+  TITLE = 'Workshop AI Summit'
+  COMMENT = 'UI guiada del Workshop AI Summit (5 ejercicios)';
+
+GRANT USAGE ON STREAMLIT WORKSHOP_APP TO ROLE PUBLIC;
+
+-- ---------------------------------------------------------------------
 -- 12. Resumen final
 -- ---------------------------------------------------------------------
 SELECT 'Setup completo.' AS status,
-       'Abre Snowsight > Projects > Notebooks > NB_AI_SUMMIT' AS siguiente_paso,
+       'Abre Snowsight > Projects > Streamlit > WORKSHOP_APP (recomendado)' AS siguiente_paso,
        'Prueba el agente en AI & ML > Snowflake Intelligence > Agente Seguros 360' AS bonus,
        'Cortex Analyst listo: Semantic View SV_SEGUROS creada' AS analyst,
        'Cortex Search: contratos + transcripciones indexados' AS search;

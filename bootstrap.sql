@@ -12,7 +12,7 @@
 -- IDEMPOTENT: TRUE   (seguro re-ejecutar)
 -- CREATES: AI_SUMMIT (database), AI_SUMMIT_WH (warehouse),
 --          AGENTE_SEGUROS_360 (agent en SNOWFLAKE_INTELLIGENCE.AGENTS),
---          NB_AI_SUMMIT (notebook), DOCS_SEARCH (cortex search service),
+--          NB_AI_SUMMIT (notebook), WORKSHOP_APP (streamlit), DOCS_SEARCH (cortex search service),
 --          SV_SEGUROS (semantic view)
 -- DO_NOT_MODIFY: object names, execution order, warehouse size
 -- REPO: https://github.com/sfc-gh-jparrado/AI_SUMMIT
@@ -80,6 +80,6 @@ EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
 -- 7. Mensaje final con próximos pasos
 SELECT
   '✅ Setup completo' AS estado,
-  '1) Abre Projects > Notebooks > NB_AI_SUMMIT para los 5 ejercicios' AS paso_1,
+  '1) Abre Projects > Streamlit > WORKSHOP_APP para los 5 ejercicios (recomendado)' AS paso_1,
   '2) Abre AI & ML > Snowflake Intelligence > Agente Seguros 360 para conversar con tus datos' AS paso_2,
   '3) Si Snowflake Intelligence no aparece, refresca la página de Snowsight' AS tip;

@@ -54,6 +54,7 @@ SELECT COUNT(*) FROM AI_SUMMIT.PUBLIC.POLIZAS;                       -- 30
 - Semantic View `AI_SUMMIT.PUBLIC.SV_SEGUROS`
 - Agent `SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360`
 - Notebook `AI_SUMMIT.PUBLIC.NB_AI_SUMMIT`
+- **Streamlit `AI_SUMMIT.PUBLIC.WORKSHOP_APP`** ⭐ (UI principal)
 
 ## Cleanup
 
@@ -66,5 +67,6 @@ DROP API INTEGRATION IF EXISTS github_ai_summit_int;
 
 ## Próximos pasos
 
-1. `Projects > Workspaces > Databases tab > AI_SUMMIT > PUBLIC > Notebooks > NB_AI_SUMMIT`
-2. `AI & ML > Snowflake Intelligence > Agente Seguros 360`
+1. **Projects > Streamlit > `WORKSHOP_APP`** ⭐ recomendado — UI guiada con los 5 ejercicios
+2. (Alternativa) **Projects > Workspaces > Databases tab > AI_SUMMIT > PUBLIC > Notebooks > NB_AI_SUMMIT**
+3. **AI & ML > Snowflake Intelligence > Agente Seguros 360**

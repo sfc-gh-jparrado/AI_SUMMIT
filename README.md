@@ -42,8 +42,9 @@ Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con ro
 | Archivo | Descripción |
 |---|---|
 | `bootstrap.sql` | Punto de entrada — ejecútalo y listo |
-| `setup.sql` | Crea tablas, semantic view, search, agente, notebook (lo invoca bootstrap) |
-| `notebook_ai_summit.ipynb` | 5 ejercicios del Workshop |
+| `setup.sql` | Crea tablas, semantic view, search, agente, notebook y **Streamlit App** (lo invoca bootstrap) |
+| `streamlit_app.py` | UI guiada del Workshop (5 ejercicios) — **recomendada** |
+| `notebook_ai_summit.ipynb` | 5 ejercicios del Workshop (alternativa al Streamlit) |
 | `prompts_cortex_code.md` | Prompts listos para Cortex Code |
 | `INSTALL.md` | Guía de instalación detallada |
 | `AGENTS.md` | Instrucciones determinísticas para LLM agents |
@@ -51,7 +52,8 @@ Instala el Workshop AI Summit del repo público sfc-gh-jparrado/AI_SUMMIT con ro
 
 ## 🎯 Próximos pasos para el estudiante
 
-1. **Projects > Notebooks > `NB_AI_SUMMIT`** — abre los ejercicios.
+1. **Projects > Streamlit > `WORKSHOP_APP`** ⭐ — UI guiada (recomendada para audiencias de negocio).
+2. (Alternativa) **Projects > Workspaces > Databases > AI_SUMMIT > PUBLIC > Notebooks > NB_AI_SUMMIT** — para audiencias técnicas.
 2. **AI & ML > Snowflake Intelligence > Agente Seguros 360** — conversa con tus datos.
 
 ## 🧹 Cleanup
