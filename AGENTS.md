@@ -18,7 +18,7 @@ If the prompt is ambiguous (e.g. just "instala el workshop"), assume the user me
 
 ## Hard rules - NEVER violate these
 
-1. **The ONE database is `AI_SUMMIT`.** Not `AI_SUMMIT_WORKSHOP`, not `WORKSHOP_AI_SUMMIT`, not `HOL_AI_SUMMIT`, not `AISUMMIT`, not `WORKSHOP`. Use `AI_SUMMIT` and only `AI_SUMMIT`. The pre-flight cleanup in `00_base.sql` already drops wrong-name DBs - if you see one created elsewhere, drop it.
+1. **The ONE database is `AI_SUMMIT`.** Not `AI_SUMMIT_WORKSHOP`, not `WORKSHOP_AI_SUMMIT`, not `HOL_AI_SUMMIT`, not `AISUMMIT`, not `WORKSHOP`, not `AI_SUMMIT_REPO_DB`, not `AI_SUMMIT_REPO`, not `AI_SUMMIT_GIT`, not `AI_SUMMIT_DB`. Use `AI_SUMMIT` and only `AI_SUMMIT`. **NEVER create a database whose name contains "REPO", "GIT", "DB" or any other suffix.** The Git repository object is `ai_summit_repo` (a Git repo, NOT a database) and lives inside `AI_SUMMIT.PUBLIC`. The pre-flight cleanup in `00_base.sql` already drops wrong-name DBs - if you see one created elsewhere, drop it.
 2. **Use the `ACCOUNTADMIN` role.**
 3. **Do NOT generate SQL "from scratch".** Always `EXECUTE IMMEDIATE FROM @stage/<file>.sql` against the repo. The files are battle-tested.
 4. **Do NOT wrap module files in `EXECUTE IMMEDIATE $$ ... $$;`.** They are multi-statement scripts; the `EXECUTE IMMEDIATE FROM @stage` clause already handles them.
@@ -41,6 +41,10 @@ DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
 DROP DATABASE IF EXISTS AI_SUMMIT_HOL;
 DROP DATABASE IF EXISTS WORKSHOP_AI;
 DROP DATABASE IF EXISTS AISUMMIT;
+DROP DATABASE IF EXISTS AI_SUMMIT_REPO_DB;
+DROP DATABASE IF EXISTS AI_SUMMIT_REPO;
+DROP DATABASE IF EXISTS AI_SUMMIT_GIT;
+DROP DATABASE IF EXISTS AI_SUMMIT_DB;
 
 CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
 USE DATABASE AI_SUMMIT;
