@@ -465,7 +465,7 @@ with tab4:
             "Vista que clasifica imagenes",
             "Crea una vista llamada V_IMAGENES_CLASIFICADAS que recorra todos los archivos "
             "del stage IMAGENES y agregue una columna con la clasificacion del tipo de imagen "
-            "(cedula, accidente vehicular, factura, otro) usando AI_CLASSIFY sobre AI_COMPLETE multimodal.",
+            "(cedula, accidente vehicular, factura, otro) usando AI_CLASSIFY directamente sobre cada archivo.",
         ),
         (
             "Vista 360 unificada",

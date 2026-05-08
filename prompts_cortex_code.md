@@ -66,7 +66,7 @@ Estos prompts los ejecuta el estudiante despues del setup, dentro del Streamlit 
 ### Prompt - Vista de imagenes clasificadas
 
 ```
-Crea una vista llamada V_IMAGENES_CLASIFICADAS que recorra todos los archivos del stage @IMAGENES y agregue una columna con la clasificacion del tipo de imagen entre las opciones: cedula, accidente vehicular, factura, logo corporativo, otro. Usa AI_CLASSIFY sobre el resultado de AI_COMPLETE con un modelo multimodal.
+Crea una vista llamada V_IMAGENES_CLASIFICADAS que recorra todos los archivos del stage @IMAGENES y agregue una columna con la clasificacion del tipo de imagen entre las opciones: cedula, accidente vehicular, factura, logo corporativo, otro. Usa AI_CLASSIFY directamente sobre cada archivo (TO_FILE).
 ```
 
 ### Prompt - Vista 360 multimodal
