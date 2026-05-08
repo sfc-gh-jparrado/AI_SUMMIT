@@ -265,7 +265,11 @@ with tab1:
             render_json(df.iloc[0]["DATOS_CEDULA"])
 
     st.info(
-        "**Insight:** una sola funcion SQL reemplaza un pipeline de OCR + parsing + validacion."
+        "**Insight competitivo:** lo que ves se hizo en **una sola consulta SQL**. "
+        "Procesos tradicionales de OCR + parsing + validacion toman semanas y multiples "
+        "servicios externos; aqui un perito digital y la verificacion de identidad estan "
+        "resueltos en minutos. **Piensa:** que documentos o imagenes en tu empresa podrian "
+        "automatizarse asi (siniestros, KYC, facturas, evidencias)?"
     )
 
 # =================================================================== Tab 2
@@ -276,17 +280,7 @@ with tab2:
         "Convertimos contratos legales en datos consumibles."
     )
 
-    st.markdown("##### Contratos ya parseados (creados por el setup)")
-    try:
-        df = run_sql(
-            "SELECT file_name AS contrato, LEFT(content, 250) AS preview "
-            "FROM AI_SUMMIT.PUBLIC.DOCS_PARSED"
-        )
-        st.dataframe(df, use_container_width=True, hide_index=True)
-    except Exception as e:
-        st.error(f"Error: {e}")
-
-    st.markdown("###### Descargar los contratos originales (PDF)")
+    st.markdown("##### Contratos disponibles - descarga el PDF original")
     try:
         docs = run_sql(
             "SELECT RELATIVE_PATH, GET_PRESIGNED_URL(@AI_SUMMIT.PUBLIC.DOCUMENTOS, "
@@ -324,8 +318,10 @@ FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
                     render_json(row["CAMPOS_EXTRAIDOS"])
 
     st.info(
-        "**Insight:** los equipos legales y operaciones se ahorran horas. "
-        "Cada campo se puede unir directamente con tu tabla de polizas."
+        "**Insight competitivo:** equipos legales y operaciones suelen invertir **horas por contrato** "
+        "leyendo y digitando datos. Snowflake los convierte en columnas listas para tu tabla de "
+        "polizas en **una linea de SQL**. **Piensa:** cuantos PDFs (contratos, polizas, ordenes de "
+        "compra, actas) podrias liberar en tu organizacion en una sola tarde?"
     )
 
 # =================================================================== Tab 3
@@ -401,8 +397,11 @@ FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
                     render_json(row["RECOMENDACIONES"])
 
     st.info(
-        "**Insight:** combinamos 3 funciones AI en SQL plano. "
-        "Sin notebooks externos, sin mover audio."
+        "**Insight competitivo:** transcribir, medir sentimiento y generar coaching "
+        "normalmente requiere 3 herramientas distintas, integraciones y mover audio entre "
+        "clouds. Aqui es **SQL puro sobre el archivo en su lugar**, sin pipelines. **Piensa:** "
+        "que llamadas de tu contact center, reuniones de venta o entrevistas podrias "
+        "escuchar y entender automaticamente esta semana?"
     )
 
 # =================================================================== Tab 4
@@ -446,8 +445,10 @@ with tab4:
             st.code(prompt, language="text")
 
     st.info(
-        "**Insight:** una persona de negocio puede construir pipelines de IA productivos "
-        "**sin esperar un sprint**."
+        "**Insight competitivo:** lo que toma a un equipo dias de desarrollo (vistas, queries, "
+        "apps), Cortex Code lo escribe en segundos directo en Snowsight. **Sin sprints, sin "
+        "tickets, sin esperar.** **Piensa:** que vista, dashboard o pipeline llevas semanas "
+        "esperando que alguien construya en tu empresa?"
     )
 
 # =================================================================== Tab 5
@@ -513,5 +514,6 @@ ORDER BY total_primas DESC;"""
 
     st.success(
         "**Felicitaciones!** En 20 minutos pasaste de archivos crudos "
-        "(imagenes, PDFs, audio) a un agente conversacional productivo."
+        "(imagenes, PDFs, audio) a un agente conversacional productivo. "
+        "**El proximo paso es tuyo:** lleva uno de estos casos a tu organizacion esta semana."
     )
