@@ -268,8 +268,8 @@ with tab1:
         "**Insight competitivo:** lo que ves se hizo en **una sola consulta SQL**. "
         "Procesos tradicionales de OCR + parsing + validacion toman semanas y multiples "
         "servicios externos; aqui un perito digital y la verificacion de identidad estan "
-        "resueltos en minutos. **Piensa:** que documentos o imagenes en tu empresa podrian "
-        "automatizarse asi (siniestros, KYC, facturas, evidencias)?"
+        "resueltos en minutos. **Imagina procesar** los documentos o imagenes en tu empresa "
+        "asi (siniestros, KYC, facturas, evidencias)."
     )
 
 # =================================================================== Tab 2
@@ -320,8 +320,8 @@ FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
     st.info(
         "**Insight competitivo:** equipos legales y operaciones suelen invertir **horas por contrato** "
         "leyendo y digitando datos. Snowflake los convierte en columnas listas para tu tabla de "
-        "polizas en **una linea de SQL**. **Piensa:** cuantos PDFs (contratos, polizas, ordenes de "
-        "compra, actas) podrias liberar en tu organizacion en una sola tarde?"
+        "polizas en **una linea de SQL**. **Imagina procesar** todos los PDFs (contratos, "
+        "polizas, ordenes de compra, actas) que tienes pendientes en tu organizacion en una sola tarde."
     )
 
 # =================================================================== Tab 3
@@ -399,9 +399,9 @@ FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
     st.info(
         "**Insight competitivo:** transcribir, medir sentimiento y generar coaching "
         "normalmente requiere 3 herramientas distintas, integraciones y mover audio entre "
-        "clouds. Aqui es **SQL puro sobre el archivo en su lugar**, sin pipelines. **Piensa:** "
-        "que llamadas de tu contact center, reuniones de venta o entrevistas podrias "
-        "escuchar y entender automaticamente esta semana?"
+        "clouds. Aqui es **SQL puro sobre el archivo en su lugar**, sin pipelines. "
+        "**Imagina procesar** todas las llamadas de tu contact center, reuniones de venta o "
+        "entrevistas y entenderlas automaticamente esta semana."
     )
 
 # =================================================================== Tab 4
