@@ -62,14 +62,24 @@ def editable_sql(key: str, default_sql: str, height: int = 200) -> str:
     return edited
 
 
+def _strip_md_fences(text: str) -> str:
+    """Strip markdown code fences (```json ... ```) commonly returned by LLMs."""
+    s = text.strip()
+    if s.startswith("```"):
+        s = s.split("\n", 1)[1] if "\n" in s else s[3:]
+    if s.endswith("```"):
+        s = s[: -3]
+    return s.strip()
+
+
 def render_json(value):
-    """Render JSON nicely; fallback to str."""
+    """Render JSON nicely; tolerate ```json fences and fallback to str."""
     if value is None:
         st.write("_(sin resultado)_")
         return
     try:
         if isinstance(value, str):
-            value = json.loads(value)
+            value = json.loads(_strip_md_fences(value))
         st.json(value)
     except Exception:
         st.write(value)
@@ -117,10 +127,11 @@ tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs(
 
 # =================================================================== Tab 0
 with tab0:
-    st.subheader("Datos con los que vamos a trabajar")
+    st.subheader("Bienvenido al Workshop")
     st.markdown(
-        "Una empresa de seguros e inmobiliaria en Colombia. "
-        "Vamos a procesar **3 tipos de datos no estructurados** + **3 tablas de negocio**."
+        "En **20 minutos** vas a ver como Snowflake convierte datos **no estructurados** "
+        "(imagenes, documentos, audio) en informacion accionable, **todo en SQL**, "
+        "y al final lo vas a conversar con un **agente**."
     )
 
     st.write("")
@@ -154,50 +165,45 @@ with tab0:
         st.warning(f"No pude leer los stages: {e}")
 
     st.divider()
-    st.markdown("#### Imagenes que vamos a analizar")
-    try:
-        imgs = run_sql(
-            "SELECT RELATIVE_PATH, GET_PRESIGNED_URL(@AI_SUMMIT.PUBLIC.IMAGENES, "
-            "RELATIVE_PATH, 3600) AS URL FROM DIRECTORY(@AI_SUMMIT.PUBLIC.IMAGENES) "
-            "ORDER BY RELATIVE_PATH"
-        )
-        cols = st.columns(max(1, len(imgs)))
-        for i, row in imgs.iterrows():
-            with cols[i]:
-                with st.container(border=True):
-                    st.image(row["URL"], caption=row["RELATIVE_PATH"], use_container_width=True)
-    except Exception as e:
-        st.warning(f"Error mostrando imagenes: {e}")
+    st.markdown("#### El paso a paso")
 
-    st.divider()
-    st.markdown("#### Audios de llamadas reales")
-    try:
-        audios = run_sql(
-            "SELECT RELATIVE_PATH, GET_PRESIGNED_URL(@AI_SUMMIT.PUBLIC.AUDIO, "
-            "RELATIVE_PATH, 3600) AS URL FROM DIRECTORY(@AI_SUMMIT.PUBLIC.AUDIO) "
-            "ORDER BY RELATIVE_PATH"
-        )
-        for _, row in audios.iterrows():
-            with st.container(border=True):
-                st.markdown(f"**{row['RELATIVE_PATH']}**")
-                st.audio(row["URL"])
-    except Exception as e:
-        st.warning(f"Error mostrando audios: {e}")
+    pasos = [
+        (
+            "1. Imagenes con IA multimodal",
+            "Le pasamos a Claude-4 una foto de un siniestro y una cedula. "
+            "En una sola consulta SQL obtenemos el peritaje y los datos KYC.",
+        ),
+        (
+            "2. Documentos a datos estructurados",
+            "Tomamos contratos en PDF, los parseamos y con `AI_EXTRACT` "
+            "sacamos arrendador, canon, plazo y poliza listos para tu data warehouse.",
+        ),
+        (
+            "3. Audio: transcripcion + sentimiento + coaching",
+            "Convertimos llamadas reales a texto, medimos el sentimiento del cliente "
+            "y generamos coaching automatico para el asesor.",
+        ),
+        (
+            "4. Cortex Code",
+            "Le pides en lenguaje natural lo que necesitas (vistas, queries, hasta "
+            "una app Streamlit) y Cortex Code escribe el codigo por ti.",
+        ),
+        (
+            "5. Snowflake Intelligence Agent",
+            "Cerramos con un agente que combina texto-a-SQL, busqueda semantica y "
+            "graficos: hablale a tus datos en espanol.",
+        ),
+    ]
 
-    st.divider()
-    st.markdown("#### Contratos PDF")
-    try:
-        docs = run_sql(
-            "SELECT RELATIVE_PATH, GET_PRESIGNED_URL(@AI_SUMMIT.PUBLIC.DOCUMENTOS, "
-            "RELATIVE_PATH, 3600) AS URL FROM DIRECTORY(@AI_SUMMIT.PUBLIC.DOCUMENTOS) "
-            "ORDER BY RELATIVE_PATH"
-        )
-        for _, row in docs.iterrows():
-            st.markdown(f"- [{row['RELATIVE_PATH']}]({row['URL']})")
-    except Exception as e:
-        st.warning(f"Error mostrando PDFs: {e}")
+    for titulo, desc in pasos:
+        with st.container(border=True):
+            st.markdown(f"**:blue[{titulo}]**")
+            st.markdown(desc)
 
-    st.info("Pasa a la siguiente pestana para empezar el Ejercicio 1.")
+    st.info(
+        "Avanza a la pestana **Ej. 1 - Imagenes** para empezar. Cada query es "
+        "editable: si rompes algo, usa el boton **Restaurar**."
+    )
 
 # =================================================================== Tab 1
 with tab1:
@@ -275,6 +281,24 @@ with tab2:
     except Exception as e:
         st.error(f"Error: {e}")
 
+    st.markdown("###### Descargar los contratos originales (PDF)")
+    try:
+        docs = run_sql(
+            "SELECT RELATIVE_PATH, GET_PRESIGNED_URL(@AI_SUMMIT.PUBLIC.DOCUMENTOS, "
+            "RELATIVE_PATH, 3600) AS URL FROM DIRECTORY(@AI_SUMMIT.PUBLIC.DOCUMENTOS) "
+            "ORDER BY RELATIVE_PATH"
+        )
+        cols = st.columns(max(1, len(docs)))
+        for i, row in docs.iterrows():
+            with cols[i]:
+                st.link_button(
+                    f"Descargar {row['RELATIVE_PATH']}",
+                    row["URL"],
+                    use_container_width=True,
+                )
+    except Exception as e:
+        st.warning(f"No se pudieron generar los enlaces: {e}")
+
     st.divider()
     st.markdown("##### Extraer campos clave con AI_EXTRACT")
     sql_extract_default = """SELECT
@@ -310,7 +334,7 @@ with tab3:
     try:
         audios = run_sql(
             "SELECT file_name, transcripcion, sentimiento "
-            "FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES ORDER BY file_name"
+            "FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES"
         )
         urls = run_sql(
             "SELECT RELATIVE_PATH AS file_name, GET_PRESIGNED_URL(@AI_SUMMIT.PUBLIC.AUDIO, "
@@ -318,19 +342,32 @@ with tab3:
         )
         url_map = dict(zip(urls["FILE_NAME"], urls["URL"]))
 
-        for _, row in audios.iterrows():
+        # Soporte/problema primero, ofrecimiento despues
+        def _orden(name: str) -> int:
+            n = (name or "").lower()
+            if "problema" in n or "soporte" in n:
+                return 0
+            return 1
+
+        audios = audios.sort_values(
+            by="FILE_NAME", key=lambda s: s.map(_orden)
+        ).reset_index(drop=True)
+
+        cols = st.columns(max(1, len(audios)))
+        for i, row in audios.iterrows():
             sent = (row["SENTIMIENTO"] or "").lower()
             color = {"positive": "green", "negative": "red", "mixed": "orange"}.get(
                 sent, "gray"
             )
-            with st.container(border=True):
-                st.markdown(
-                    f"**{row['FILE_NAME']}** - sentimiento: :{color}[**{sent}**]"
-                )
-                if row["FILE_NAME"] in url_map:
-                    st.audio(url_map[row["FILE_NAME"]])
-                with st.expander("Ver transcripcion"):
-                    st.write(row["TRANSCRIPCION"])
+            with cols[i]:
+                with st.container(border=True):
+                    st.markdown(
+                        f"**{row['FILE_NAME']}** - sentimiento: :{color}[**{sent}**]"
+                    )
+                    if row["FILE_NAME"] in url_map:
+                        st.audio(url_map[row["FILE_NAME"]])
+                    with st.expander("Ver transcripcion"):
+                        st.write(row["TRANSCRIPCION"])
     except Exception as e:
         st.error(f"Error: {e}")
 
