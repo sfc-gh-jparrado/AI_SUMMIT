@@ -52,10 +52,20 @@ DROP DATABASE IF EXISTS AISUMMIT;
 -- Habilitar inferencia cross-region (modelos no locales como Claude)
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
 
--- Crear el Snowflake Intelligence Object (registro requerido para que el agente sea visible).
--- Este comando provisiona automaticamente la base SNOWFLAKE_INTELLIGENCE y el schema AGENTS
--- (owned por SNOWFLAKE_INTELLIGENCE_ADMIN). NO crearlos a mano: ACCOUNTADMIN no puede.
+-- Crear el Snowflake Intelligence Object (provisiona la base SNOWFLAKE_INTELLIGENCE,
+-- el schema AGENTS y el rol SNOWFLAKE_INTELLIGENCE_ADMIN). NO crear DB/schema a mano:
+-- son owned por SNOWFLAKE_INTELLIGENCE_ADMIN y ACCOUNTADMIN no puede.
+-- Referencia: https://docs.snowflake.com/en/user-guide/snowflake-cortex/snowflake-intelligence/getting-started
 CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
+
+-- Grant requerido por la doc oficial: el rol SI_ADMIN necesita USAGE sobre el SI Object.
+GRANT USAGE ON SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT
+  TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+
+-- Hacer que ACCOUNTADMIN herede SNOWFLAKE_INTELLIGENCE_ADMIN para poder crear agentes.
+-- (la doc oficial sugiere CAMBIAR el rol activo a SI_ADMIN; en un script automatizado
+-- preferimos grant + herencia para no fragmentar el flujo).
+GRANT ROLE SNOWFLAKE_INTELLIGENCE_ADMIN TO ROLE ACCOUNTADMIN;
 
 -- Crear DB y warehouse si no existen
 CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
@@ -568,17 +578,22 @@ $$);
 -- 10. Agente con Cortex Analyst + Cortex Search + Chart
 --     Creado en SNOWFLAKE_INTELLIGENCE.AGENTS para que aparezca en la UI
 -- ---------------------------------------------------------------------
--- Reafirmar rol antes de tocar SNOWFLAKE_INTELLIGENCE.* (previene drift de contexto
--- si una sentencia previa cambio el rol o el current database/schema). Es ACCOUNTADMIN
--- quien tiene permiso de CREATE/REPLACE AGENT en SNOWFLAKE_INTELLIGENCE.AGENTS.
+-- Reafirmar rol antes de tocar SNOWFLAKE_INTELLIGENCE.* (previene drift de contexto).
+-- ACCOUNTADMIN ya hereda SNOWFLAKE_INTELLIGENCE_ADMIN (grant aplicado en la seccion 1),
+-- y USE SECONDARY ROLES ALL activa cualquier role granted al user de respaldo.
 USE ROLE ACCOUNTADMIN;
--- Activar todas las roles secundarias del usuario: SNOWFLAKE_INTELLIGENCE_ADMIN suele
--- estar grant directo al user (no a ACCOUNTADMIN). Sin esto, el CREATE AGENT falla con
--- "Database 'SNOWFLAKE_INTELLIGENCE' does not exist or not authorized".
 USE SECONDARY ROLES ALL;
 USE DATABASE AI_SUMMIT;
 USE SCHEMA PUBLIC;
 USE WAREHOUSE AI_SUMMIT_WH;
+
+-- Grants previos para que el agente pueda usar las herramientas (semantic view + search):
+-- el rol que crea el agente necesita USAGE/SELECT sobre los recursos referenciados.
+GRANT USAGE ON DATABASE AI_SUMMIT             TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+GRANT USAGE ON SCHEMA AI_SUMMIT.PUBLIC        TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+GRANT SELECT ON ALL TABLES IN SCHEMA AI_SUMMIT.PUBLIC TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+GRANT SELECT ON SEMANTIC VIEW AI_SUMMIT.PUBLIC.SV_SEGUROS TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
+GRANT USAGE ON CORTEX SEARCH SERVICE AI_SUMMIT.PUBLIC.DOCS_SEARCH TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
 
 CREATE OR REPLACE AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360
   WITH PROFILE='{"display_name": "Agente Seguros 360"}'
