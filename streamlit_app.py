@@ -493,7 +493,7 @@ with tab4:
     st.info(
         "**Insight competitivo:** lo que toma a un equipo dias de desarrollo (vistas, queries, "
         "apps), Cortex Code lo escribe en segundos directo en Snowsight. **Sin sprints, sin "
-        "tickets, sin esperar.** **Piensa:** que vista, dashboard o pipeline llevas semanas "
+        "tickets, sin esperar.**\n\n**Piensa:** que vista, dashboard o pipeline llevas semanas "
         "esperando que alguien construya en tu empresa?"
     )
 
