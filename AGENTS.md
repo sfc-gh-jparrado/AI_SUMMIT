@@ -9,7 +9,7 @@ When the user mentions ANY of the keywords below, run **only** the indicated fil
 | User says (any of these keywords) | Run file | Duration |
 |---|---|---|
 | "foundation", "base", "paso base", "instalar workshop", "instala el setup base", "instalar AI Summit", "00", "0" | `00_base.sql` | ~30s |
-| "streamlit", "notebook", "paso 1", "paso del streamlit", "01" | `01_streamlit.sql` | ~10s |
+| "streamlit", "paso 1", "paso del streamlit", "01" | `01_streamlit.sql` | ~10s |
 | "cortex analyst", "cortex search", "semantic view", "search service", "paso 2", "02" | `02_analyst_search.sql` | ~45s |
 | "agente", "agent", "snowflake intelligence", "paso 3", "03" | `03_agent.sql` | ~5s |
 | "todo el workshop", "instala todo", "one-shot", "todo en uno" | `setup.sql` | ~90s |
@@ -76,7 +76,6 @@ Then run the appropriate module(s) according to the routing table.
 | API integration | `github_ai_summit_int` |
 | Git repo | `ai_summit_repo` |
 | Agent | `SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360` |
-| Notebook | `NB_AI_SUMMIT` |
 | Streamlit | `WORKSHOP_APP` |
 | Cortex Search | `DOCS_SEARCH` |
 | Semantic View | `SV_SEGUROS` |

@@ -42,7 +42,7 @@ EXECUTE IMMEDIATE FROM @ai_summit_repo/branches/main/setup.sql;
 ```sql
 SHOW DATABASES LIKE 'AI_SUMMIT%';                                    -- solo AI_SUMMIT
 SHOW AGENTS LIKE 'AGENTE_SEGUROS_360' IN SCHEMA SNOWFLAKE_INTELLIGENCE.AGENTS;
-SHOW NOTEBOOKS LIKE 'NB_AI_SUMMIT' IN SCHEMA AI_SUMMIT.PUBLIC;
+SHOW STREAMLITS LIKE 'WORKSHOP_APP' IN SCHEMA AI_SUMMIT.PUBLIC;
 SELECT COUNT(*) FROM AI_SUMMIT.PUBLIC.POLIZAS;                       -- 30
 ```
 
@@ -53,8 +53,7 @@ SELECT COUNT(*) FROM AI_SUMMIT.PUBLIC.POLIZAS;                       -- 30
 - Cortex Search `AI_SUMMIT.PUBLIC.DOCS_SEARCH`
 - Semantic View `AI_SUMMIT.PUBLIC.SV_SEGUROS`
 - Agent `SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360`
-- Notebook `AI_SUMMIT.PUBLIC.NB_AI_SUMMIT`
-- **Streamlit `AI_SUMMIT.PUBLIC.WORKSHOP_APP`** ⭐ (UI principal)
+- **Streamlit `AI_SUMMIT.PUBLIC.WORKSHOP_APP`** (UI principal)
 
 ## Cleanup
 
@@ -67,6 +66,5 @@ DROP API INTEGRATION IF EXISTS github_ai_summit_int;
 
 ## Próximos pasos
 
-1. **Projects > Streamlit > `WORKSHOP_APP`** ⭐ recomendado — UI guiada con los 5 ejercicios
-2. (Alternativa) **Projects > Workspaces > Databases tab > AI_SUMMIT > PUBLIC > Notebooks > NB_AI_SUMMIT**
-3. **AI & ML > Snowflake Intelligence > Agente Seguros 360**
+1. **Projects > Streamlit > `WORKSHOP_APP`** - UI guiada del Workshop
+2. **AI & ML > Snowflake Intelligence > Agente Seguros 360**

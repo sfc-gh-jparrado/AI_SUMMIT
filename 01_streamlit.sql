@@ -1,15 +1,14 @@
 -- =====================================================================
--- Workshop AI SUMMIT - 01 STREAMLIT + NOTEBOOK - PASO 1 DE 4
+-- Workshop AI SUMMIT - 01 STREAMLIT - PASO 1 DE 4
 -- =====================================================================
--- LLM/AGENTE: si el usuario menciona "streamlit", "notebook" o "paso 1",
+-- LLM/AGENTE: si el usuario menciona "streamlit" o "paso 1",
 -- ejecuta SOLO este archivo. NO ejecutes setup.sql ni los otros modulos.
 -- Requiere 00_base.sql ya completado. Sigue las reglas en AGENTS.md.
 -- =====================================================================
 -- ORDEN DE EJECUCION: archivo 2 de 4. Requiere 00_base.sql ya ejecutado.
--- Crea: Notebook NB_AI_SUMMIT y Streamlit App WORKSHOP_APP, ambos
---       desde el repo Git. La app cubre los 5 ejercicios + Bonus de
---       AI Functions (AI_COMPLETE, AI_EXTRACT, AI_TRANSCRIBE, AI_SENTIMENT,
---       AI_FILTER, AI_REDACT, AI_AGG, AI_CLASSIFY).
+-- Crea: Streamlit App WORKSHOP_APP desde el repo Git. La app cubre los
+--       5 ejercicios + Bonus de AI Functions (AI_COMPLETE, AI_EXTRACT,
+--       AI_TRANSCRIBE, AI_SENTIMENT, AI_FILTER, AI_REDACT, AI_AGG, AI_CLASSIFY).
 -- Las AI Functions se ejecutan en RUNTIME desde el Streamlit; aqui solo
 -- se crea el contenedor de la app. Es independiente de Cortex Analyst /
 -- Cortex Search / Agent (esos van en 02 y 03), por lo que el alumno puede
@@ -30,17 +29,7 @@ USE WAREHOUSE AI_SUMMIT_WH;
 ALTER GIT REPOSITORY AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO FETCH;
 
 -- ---------------------------------------------------------------------
--- 1. Notebook desde el repo Git
--- ---------------------------------------------------------------------
-CREATE OR REPLACE NOTEBOOK NB_AI_SUMMIT
-  FROM '@AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/'
-  MAIN_FILE = 'notebook_ai_summit.ipynb'
-  QUERY_WAREHOUSE = AI_SUMMIT_WH;
-
-ALTER NOTEBOOK NB_AI_SUMMIT ADD LIVE VERSION FROM LAST;
-
--- ---------------------------------------------------------------------
--- 2. Streamlit-in-Snowflake (UI principal del Workshop)
+-- 1. Streamlit-in-Snowflake (UI principal del Workshop)
 -- ---------------------------------------------------------------------
 CREATE OR REPLACE STREAMLIT WORKSHOP_APP
   FROM '@AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/'

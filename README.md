@@ -11,7 +11,7 @@ Mas rapido, menos propenso a errores, y los prompts 1 y 2 corren en paralelo.
 | Paso | Archivo | Tiempo | Que hace |
 |---|---|---|---|
 | **0** | `00_base.sql` | ~30s | DB, GIT, stages, archivos, tablas, prereqs |
-| **1** | `01_streamlit.sql` | ~10s | Notebook + Streamlit App |
+| **1** | `01_streamlit.sql` | ~10s | Streamlit App |
 | **2** | `02_analyst_search.sql` | ~45s | Semantic View + Cortex Search Service |
 | **3** | `03_agent.sql` | ~5s | Snowflake Intelligence Agent |
 
@@ -47,12 +47,11 @@ Tarda ~90 segundos en serie.
 | Archivo | Descripcion |
 |---|---|
 | `00_base.sql` | Foundation: DB, GIT, stages, datos, tablas |
-| `01_streamlit.sql` | Notebook + Streamlit App |
+| `01_streamlit.sql` | Streamlit App |
 | `02_analyst_search.sql` | Semantic View + Cortex Search Service |
 | `03_agent.sql` | Snowflake Intelligence Agent |
 | `setup.sql` | Orquestador one-shot (corre los 4 modulos en orden) |
 | `streamlit_app.py` | UI guiada del Workshop (bienvenida + 5 ejercicios + bonus) |
-| `notebook_ai_summit.ipynb` | Alternativa tecnica al Streamlit |
 | `prompts_cortex_code.md` | Prompts listos para Cortex Code |
 | `INSTALL.md` | Guia de instalacion detallada |
 | `AGENTS.md` | Instrucciones deterministicas para LLM agents |
@@ -60,9 +59,8 @@ Tarda ~90 segundos en serie.
 
 ## Proximos pasos para el estudiante
 
-1. **Projects > Streamlit > `WORKSHOP_APP`** - UI guiada (recomendada para audiencias de negocio)
-2. (Alternativa) **Projects > Workspaces > AI_SUMMIT > PUBLIC > Notebooks > NB_AI_SUMMIT** - para audiencias tecnicas
-3. **AI & ML > Snowflake Intelligence > Agente Seguros 360** - conversa con tus datos
+1. **Projects > Streamlit > `WORKSHOP_APP`** - UI guiada del Workshop
+2. **AI & ML > Snowflake Intelligence > Agente Seguros 360** - conversa con tus datos
 
 ## Cleanup
 
