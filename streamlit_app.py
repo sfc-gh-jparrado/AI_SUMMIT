@@ -128,11 +128,16 @@ tab0, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
 
 # =================================================================== Tab 0
 with tab0:
-    st.subheader("Bienvenido al Workshop")
+    st.subheader("Bienvenido al Workshop AI Summit")
     st.markdown(
-        "En **20 minutos** vas a ver como Snowflake convierte datos **no estructurados** "
-        "(imagenes, documentos, audio) en informacion accionable, **todo en SQL**, "
-        "y al final lo vas a conversar con un **agente**."
+        "Hoy vas a vivir, en **menos de 20 minutos**, lo que normalmente toma a un equipo "
+        "**semanas de integraciones, modelos y pipelines**. Trabajamos con datos reales de "
+        "una empresa **de seguros e inmobiliaria en Colombia** y al final tendras un "
+        "**agente conversacional** listo para tus datos."
+    )
+    st.markdown(
+        "**Lo unico que vas a usar es SQL**: nada de notebooks externos, sin mover archivos, "
+        "sin entrenar modelos. Todo corre dentro de Snowflake."
     )
 
     st.write("")
@@ -166,33 +171,43 @@ with tab0:
         st.warning(f"No pude leer los stages: {e}")
 
     st.divider()
-    st.markdown("#### El paso a paso")
+    st.markdown("#### Lo que vas a hacer")
 
     pasos = [
         (
-            "1. Imagenes con IA multimodal",
-            "Le pasamos a Claude-4 una foto de un siniestro y una cedula. "
-            "En una sola consulta SQL obtenemos el peritaje y los datos para verificar la identidad del cliente.",
+            "Imagenes con IA multimodal",
+            "Le entregas a **Claude-4 Sonnet** la foto de un **siniestro vehicular** y una "
+            "**cedula**. En una sola consulta obtienes el peritaje del dano (severidad y "
+            "costo estimado) y los datos del cliente para verificar su identidad.",
         ),
         (
-            "2. Documentos a datos estructurados",
-            "Tomamos contratos en PDF, los parseamos y con `AI_EXTRACT` "
-            "sacamos arrendador, canon, plazo y poliza listos para tu data warehouse.",
+            "Documentos a datos estructurados",
+            "Tomamos **contratos de arrendamiento en PDF** y con `AI_EXTRACT` sacamos "
+            "**arrendador, canon, plazo, direccion del inmueble y poliza**, listos para "
+            "tu data warehouse. Adios al data entry manual.",
         ),
         (
-            "3. Audio: transcripcion + sentimiento + coaching",
-            "Convertimos llamadas reales a texto, medimos el sentimiento del cliente "
-            "y generamos coaching automatico para el asesor.",
+            "Audio: transcripcion + sentimiento + coaching",
+            "Llamadas reales del contact center se convierten a texto con `AI_TRANSCRIBE`, "
+            "medimos el sentimiento del cliente con `AI_SENTIMENT` y `AI_COMPLETE` genera "
+            "**coaching automatico** para el asesor (puntos de dolor, fortalezas, script sugerido).",
         ),
         (
-            "4. Cortex Code",
-            "Le pides en lenguaje natural lo que necesitas (vistas, queries, hasta "
-            "una app Streamlit) y Cortex Code escribe el codigo por ti.",
+            "Cortex Code",
+            "Le pides en lenguaje natural lo que necesitas (una vista, una app Streamlit, "
+            "una clasificacion) y **Cortex Code escribe el SQL por ti**, directo en Snowsight.",
         ),
         (
-            "5. Snowflake Intelligence Agent",
-            "Cerramos con un agente que combina texto-a-SQL, busqueda semantica y "
-            "graficos: hablale a tus datos en espanol.",
+            "Snowflake Intelligence Agent",
+            "Cerramos con el agente **AGENTE_SEGUROS_360** que combina **Cortex Analyst** "
+            "(texto-a-SQL sobre polizas, clientes y reclamaciones), **Cortex Search** "
+            "(contratos + transcripciones) y graficos automaticos.",
+        ),
+        (
+            "Bonus - Mas AI Functions",
+            "Veras **AI_FILTER, AI_REDACT, AI_AGG y AI_CLASSIFY** en accion: filtros "
+            "inteligentes, anonimizacion de PII, resumenes consolidados y clasificacion. "
+            "Mas una tabla con muchas mas funciones disponibles en SQL.",
         ),
     ]
 
