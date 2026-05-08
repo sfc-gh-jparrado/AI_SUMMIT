@@ -52,7 +52,9 @@ DROP DATABASE IF EXISTS AISUMMIT;
 -- Habilitar inferencia cross-region (modelos no locales como Claude)
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
 
--- Crear el Snowflake Intelligence Object (registro requerido para que el agente sea visible)
+-- Crear el Snowflake Intelligence Object (registro requerido para que el agente sea visible).
+-- Este comando provisiona automaticamente la base SNOWFLAKE_INTELLIGENCE y el schema AGENTS
+-- (owned por SNOWFLAKE_INTELLIGENCE_ADMIN). NO crearlos a mano: ACCOUNTADMIN no puede.
 CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
 
 -- Crear DB y warehouse si no existen
@@ -566,6 +568,18 @@ $$);
 -- 10. Agente con Cortex Analyst + Cortex Search + Chart
 --     Creado en SNOWFLAKE_INTELLIGENCE.AGENTS para que aparezca en la UI
 -- ---------------------------------------------------------------------
+-- Reafirmar rol antes de tocar SNOWFLAKE_INTELLIGENCE.* (previene drift de contexto
+-- si una sentencia previa cambio el rol o el current database/schema). Es ACCOUNTADMIN
+-- quien tiene permiso de CREATE/REPLACE AGENT en SNOWFLAKE_INTELLIGENCE.AGENTS.
+USE ROLE ACCOUNTADMIN;
+-- Activar todas las roles secundarias del usuario: SNOWFLAKE_INTELLIGENCE_ADMIN suele
+-- estar grant directo al user (no a ACCOUNTADMIN). Sin esto, el CREATE AGENT falla con
+-- "Database 'SNOWFLAKE_INTELLIGENCE' does not exist or not authorized".
+USE SECONDARY ROLES ALL;
+USE DATABASE AI_SUMMIT;
+USE SCHEMA PUBLIC;
+USE WAREHOUSE AI_SUMMIT_WH;
+
 CREATE OR REPLACE AGENT SNOWFLAKE_INTELLIGENCE.AGENTS.AGENTE_SEGUROS_360
   WITH PROFILE='{"display_name": "Agente Seguros 360"}'
   COMMENT = 'Agente inteligente que analiza datos de pólizas, busca en contratos y genera gráficos'
@@ -654,7 +668,7 @@ CREATE OR REPLACE STREAMLIT WORKSHOP_APP
   MAIN_FILE = 'streamlit_app.py'
   QUERY_WAREHOUSE = AI_SUMMIT_WH
   TITLE = 'Workshop AI Summit'
-  COMMENT = 'UI guiada del Workshop AI Summit (5 ejercicios)';
+  COMMENT = 'UI guiada del Workshop AI Summit (6 secciones: bienvenida + 5 ejercicios + bonus AI Functions)';
 
 GRANT USAGE ON STREAMLIT WORKSHOP_APP TO ROLE PUBLIC;
 
