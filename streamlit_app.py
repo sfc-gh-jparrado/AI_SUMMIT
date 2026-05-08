@@ -130,45 +130,15 @@ tab0, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
 with tab0:
     st.subheader("Bienvenido al Workshop AI Summit")
     st.markdown(
-        "Hoy vas a vivir, en **menos de 20 minutos**, lo que normalmente toma a un equipo "
-        "**semanas de integraciones, modelos y pipelines**. Trabajamos con datos reales de "
-        "una empresa **de seguros e inmobiliaria en Colombia** y al final tendras un "
-        "**agente conversacional** listo para tus datos."
+        "Ahora vamos a hacer en **menos de 15 minutos** lo que normalmente toma "
+        "**semanas a un equipo** de integraciones, modelos y pipelines. Trabajamos con "
+        "datos reales de una empresa **de seguros e inmobiliaria en Colombia** y al "
+        "final tendras un **agente conversacional** listo para tus datos."
     )
     st.markdown(
         "**Lo unico que vas a usar es SQL**: nada de notebooks externos, sin mover archivos, "
         "sin entrenar modelos. Todo corre dentro de Snowflake."
     )
-
-    st.write("")
-    c1, c2, c3 = st.columns(3)
-    try:
-        c1.metric(
-            "Imagenes",
-            int(
-                run_sql(
-                    "SELECT COUNT(*) AS n FROM DIRECTORY(@AI_SUMMIT.PUBLIC.IMAGENES)"
-                ).iloc[0]["N"]
-            ),
-        )
-        c2.metric(
-            "Documentos PDF",
-            int(
-                run_sql(
-                    "SELECT COUNT(*) AS n FROM DIRECTORY(@AI_SUMMIT.PUBLIC.DOCUMENTOS)"
-                ).iloc[0]["N"]
-            ),
-        )
-        c3.metric(
-            "Audios",
-            int(
-                run_sql(
-                    "SELECT COUNT(*) AS n FROM DIRECTORY(@AI_SUMMIT.PUBLIC.AUDIO)"
-                ).iloc[0]["N"]
-            ),
-        )
-    except Exception as e:
-        st.warning(f"No pude leer los stages: {e}")
 
     st.divider()
     st.markdown("#### Lo que vas a hacer")
