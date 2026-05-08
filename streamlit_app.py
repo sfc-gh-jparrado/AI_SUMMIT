@@ -404,7 +404,8 @@ FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
 with tab4:
     st.subheader("Ejercicio 4 - Cortex Code")
     st.markdown(
-        "Sal de esta app y abre **Cortex Code** en Snowsight (Cmd/Ctrl + I o icono de chispa). "
+        "Para abrir **Cortex Code** haz clic en el **icono de la chispa** ubicado en la "
+        "**esquina inferior derecha** de Snowsight. "
         "Asegurate de estar en `AI_SUMMIT.PUBLIC` con warehouse `AI_SUMMIT_WH`. "
         "Pega cada prompt y observa como Cortex Code genera el codigo."
     )
