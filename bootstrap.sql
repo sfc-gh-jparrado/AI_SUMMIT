@@ -31,6 +31,16 @@
 
 USE ROLE ACCOUNTADMIN;
 
+-- 0. PRE-FLIGHT: borrar bases de datos con nombres incorrectos que un LLM pudo
+--    haber creado al interpretar libremente "Workshop AI Summit" o variantes.
+--    LA UNICA BASE PERMITIDA ES "AI_SUMMIT".
+DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
+DROP DATABASE IF EXISTS WORKSHOP_AI_SUMMIT;
+DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
+DROP DATABASE IF EXISTS AI_SUMMIT_HOL;
+DROP DATABASE IF EXISTS WORKSHOP_AI;
+DROP DATABASE IF EXISTS AISUMMIT;
+
 -- 1. Habilitar inferencia cross-region (para modelos no locales)
 ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
 
