@@ -13,33 +13,14 @@
 Tiempo aprox: ~30 segundos.
 
 ```
-Pega y ejecuta este SQL TAL CUAL en un Worksheet con rol ACCOUNTADMIN. NO inventes nombres, NO modifiques identificadores:
+Necesito instalar el Workshop AI Summit en mi cuenta de Snowflake.
 
-```sql
-USE ROLE ACCOUNTADMIN;
-DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
-DROP DATABASE IF EXISTS WORKSHOP_AI_SUMMIT;
-DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
-DROP DATABASE IF EXISTS AI_SUMMIT_REPO_DB;
-DROP DATABASE IF EXISTS AI_SUMMIT_REPO;
-DROP DATABASE IF EXISTS AI_SUMMIT_GIT;
-DROP DATABASE IF EXISTS AI_SUMMIT_DB;
-CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
-USE DATABASE AI_SUMMIT;
-USE SCHEMA PUBLIC;
-CREATE WAREHOUSE IF NOT EXISTS AI_SUMMIT_WH WAREHOUSE_SIZE=XSMALL AUTO_SUSPEND=60 INITIALLY_SUSPENDED=FALSE;
-USE WAREHOUSE AI_SUMMIT_WH;
-CREATE OR REPLACE API INTEGRATION github_ai_summit_int
-  API_PROVIDER = git_https_api
-  API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-jparrado')
-  ENABLED = TRUE
-  ALLOWED_AUTHENTICATION_SECRETS = ();
-CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
-  API_INTEGRATION = github_ai_summit_int
-  ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
-ALTER GIT REPOSITORY ai_summit_repo FETCH;
-EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/00_base.sql;
-```
+Repo publico: https://github.com/sfc-gh-jparrado/AI_SUMMIT
+
+Por favor, usando el rol ACCOUNTADMIN:
+1. Conecta el repo con una API integration y un Git repository
+2. Ejecuta el archivo 00_base.sql del branch main
+3. La unica base de datos que se debe crear se llama AI_SUMMIT (no inventes otros nombres)
 ```
 
 ### Prompt 1 - Streamlit + Notebook (las AI Functions)
@@ -47,7 +28,7 @@ EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/00_base.sq
 Tiempo aprox: ~10 segundos. Requiere prompt 0 ya completado.
 
 ```
-Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/01_streamlit.sql;
+Sigamos con el Workshop AI Summit. Despliega la app guiada: con rol ACCOUNTADMIN, ejecuta el archivo 01_streamlit.sql del repo ai_summit_repo (branch main).
 ```
 
 ### Prompt 2 - Cortex Analyst + Cortex Search
@@ -55,7 +36,7 @@ Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT
 Tiempo aprox: ~45 segundos. Requiere prompt 0 ya completado. Puede correrse en paralelo con prompt 1.
 
 ```
-Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/02_analyst_search.sql;
+Sigamos con el Workshop AI Summit. Crea las herramientas de IA (Cortex Analyst y Cortex Search): con rol ACCOUNTADMIN, ejecuta el archivo 02_analyst_search.sql del repo ai_summit_repo (branch main).
 ```
 
 ### Prompt 3 - Snowflake Intelligence Agent
@@ -63,7 +44,7 @@ Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT
 Tiempo aprox: ~5 segundos. Requiere prompts 0 y 2 completados.
 
 ```
-Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/03_agent.sql;
+Cerremos el Workshop AI Summit con el agente conversacional: con rol ACCOUNTADMIN, ejecuta el archivo 03_agent.sql del repo ai_summit_repo (branch main). Este agente combina Cortex Analyst, Cortex Search y graficos automaticos.
 ```
 
 ---
