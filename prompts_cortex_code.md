@@ -13,7 +13,33 @@
 Tiempo aprox: ~30 segundos.
 
 ```
-Con rol ACCOUNTADMIN, instala la foundation del Workshop AI Summit (repo: sfc-gh-jparrado/AI_SUMMIT). Sigue AGENTS.md.
+Pega y ejecuta este SQL TAL CUAL en un Worksheet con rol ACCOUNTADMIN. NO inventes nombres, NO modifiques identificadores:
+
+```sql
+USE ROLE ACCOUNTADMIN;
+DROP DATABASE IF EXISTS AI_SUMMIT_WORKSHOP;
+DROP DATABASE IF EXISTS WORKSHOP_AI_SUMMIT;
+DROP DATABASE IF EXISTS HOL_AI_SUMMIT;
+DROP DATABASE IF EXISTS AI_SUMMIT_REPO_DB;
+DROP DATABASE IF EXISTS AI_SUMMIT_REPO;
+DROP DATABASE IF EXISTS AI_SUMMIT_GIT;
+DROP DATABASE IF EXISTS AI_SUMMIT_DB;
+CREATE DATABASE IF NOT EXISTS AI_SUMMIT;
+USE DATABASE AI_SUMMIT;
+USE SCHEMA PUBLIC;
+CREATE WAREHOUSE IF NOT EXISTS AI_SUMMIT_WH WAREHOUSE_SIZE=XSMALL AUTO_SUSPEND=60 INITIALLY_SUSPENDED=FALSE;
+USE WAREHOUSE AI_SUMMIT_WH;
+CREATE OR REPLACE API INTEGRATION github_ai_summit_int
+  API_PROVIDER = git_https_api
+  API_ALLOWED_PREFIXES = ('https://github.com/sfc-gh-jparrado')
+  ENABLED = TRUE
+  ALLOWED_AUTHENTICATION_SECRETS = ();
+CREATE OR REPLACE GIT REPOSITORY ai_summit_repo
+  API_INTEGRATION = github_ai_summit_int
+  ORIGIN = 'https://github.com/sfc-gh-jparrado/AI_SUMMIT.git';
+ALTER GIT REPOSITORY ai_summit_repo FETCH;
+EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/00_base.sql;
+```
 ```
 
 ### Prompt 1 - Streamlit + Notebook (las AI Functions)
@@ -21,7 +47,7 @@ Con rol ACCOUNTADMIN, instala la foundation del Workshop AI Summit (repo: sfc-gh
 Tiempo aprox: ~10 segundos. Requiere prompt 0 ya completado.
 
 ```
-Instala el paso de Streamlit + Notebook del Workshop AI Summit. Sigue AGENTS.md.
+Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/01_streamlit.sql;
 ```
 
 ### Prompt 2 - Cortex Analyst + Cortex Search
@@ -29,7 +55,7 @@ Instala el paso de Streamlit + Notebook del Workshop AI Summit. Sigue AGENTS.md.
 Tiempo aprox: ~45 segundos. Requiere prompt 0 ya completado. Puede correrse en paralelo con prompt 1.
 
 ```
-Instala el paso de Cortex Analyst + Cortex Search del Workshop AI Summit. Sigue AGENTS.md.
+Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/02_analyst_search.sql;
 ```
 
 ### Prompt 3 - Snowflake Intelligence Agent
@@ -37,7 +63,7 @@ Instala el paso de Cortex Analyst + Cortex Search del Workshop AI Summit. Sigue 
 Tiempo aprox: ~5 segundos. Requiere prompts 0 y 2 completados.
 
 ```
-Instala el agente Snowflake Intelligence del Workshop AI Summit. Sigue AGENTS.md.
+Con rol ACCOUNTADMIN ejecuta: EXECUTE IMMEDIATE FROM @AI_SUMMIT.PUBLIC.AI_SUMMIT_REPO/branches/main/03_agent.sql;
 ```
 
 ---

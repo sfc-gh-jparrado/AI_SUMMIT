@@ -45,10 +45,44 @@ ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'ANY_REGION';
 -- ---------------------------------------------------------------------
 -- 2. Snowflake Intelligence Object + grants (alineado con docs oficiales).
 --    Provisiona la base SNOWFLAKE_INTELLIGENCE, el schema AGENTS y el rol
---    SNOWFLAKE_INTELLIGENCE_ADMIN. NO crear DB/schema a mano: ACCOUNTADMIN
---    no tiene OWNERSHIP sobre SNOWFLAKE_INTELLIGENCE.
+--    SNOWFLAKE_INTELLIGENCE_ADMIN.
 -- ---------------------------------------------------------------------
 CREATE SNOWFLAKE INTELLIGENCE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT;
+
+-- Fallback robusto: si por alguna razon CREATE SNOWFLAKE INTELLIGENCE no
+-- propago la base SNOWFLAKE_INTELLIGENCE (puede ocurrir en algunos trials),
+-- intentamos crearla a mano. Si ya existe (owned por SI_ADMIN), capturamos
+-- el error y seguimos: ya esta lo necesario.
+EXECUTE IMMEDIATE $$
+BEGIN
+  CREATE DATABASE IF NOT EXISTS SNOWFLAKE_INTELLIGENCE;
+  CREATE SCHEMA   IF NOT EXISTS SNOWFLAKE_INTELLIGENCE.AGENTS;
+  RETURN 'SNOWFLAKE_INTELLIGENCE provisionado a mano (fallback)';
+EXCEPTION
+  WHEN OTHER THEN
+    RETURN 'SNOWFLAKE_INTELLIGENCE ya existe (provisionado por CREATE SNOWFLAKE INTELLIGENCE), OK';
+END;
+$$;
+
+-- Verificacion explicita: si SNOWFLAKE_INTELLIGENCE.AGENTS no existe a este
+-- punto, fallamos ruidosamente para que el usuario sepa.
+EXECUTE IMMEDIATE $$
+DECLARE
+  cnt NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO :cnt FROM SNOWFLAKE.ACCOUNT_USAGE.SCHEMATA
+    WHERE CATALOG_NAME = 'SNOWFLAKE_INTELLIGENCE'
+      AND SCHEMA_NAME  = 'AGENTS'
+      AND DELETED IS NULL;
+  IF (cnt = 0) THEN
+    RETURN 'WARNING: SNOWFLAKE_INTELLIGENCE.AGENTS no aparece en ACCOUNT_USAGE (latencia normal). El paso 03 lo verifica antes de crear el agente.';
+  END IF;
+  RETURN 'SNOWFLAKE_INTELLIGENCE.AGENTS visible';
+EXCEPTION
+  WHEN OTHER THEN
+    RETURN 'No se pudo consultar ACCOUNT_USAGE (sin privilegios o latencia). Continuando.';
+END;
+$$;
 
 GRANT USAGE ON SNOWFLAKE INTELLIGENCE SNOWFLAKE_INTELLIGENCE_OBJECT_DEFAULT
   TO ROLE SNOWFLAKE_INTELLIGENCE_ADMIN;
