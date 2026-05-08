@@ -114,7 +114,7 @@ with st.container(border=True):
 st.write("")  # spacer
 
 # =========================================================== tabs
-tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs(
+tab0, tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(
     [
         "Bienvenida",
         "Ej. 1 - Imagenes",
@@ -122,6 +122,7 @@ tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs(
         "Ej. 3 - Audio",
         "Ej. 4 - Cortex Code",
         "Ej. 5 - Agente",
+        "Bonus - Mas AI Functions",
     ]
 )
 
@@ -516,4 +517,121 @@ ORDER BY total_primas DESC;"""
         "**Felicitaciones!** En 20 minutos pasaste de archivos crudos "
         "(imagenes, PDFs, audio) a un agente conversacional productivo. "
         "**El proximo paso es tuyo:** lleva uno de estos casos a tu organizacion esta semana."
+    )
+
+# =================================================================== Tab 6 (Bonus)
+with tab6:
+    st.subheader("Bonus - Mas AI Functions de Snowflake Cortex")
+    st.markdown(
+        "Mas alla de `AI_COMPLETE`, `AI_EXTRACT`, `AI_TRANSCRIBE` y `AI_SENTIMENT` "
+        "que ya viste, **Snowflake Cortex** trae una bateria de funciones SQL "
+        "especializadas. Aqui hay 4 ejemplos listos para correr."
+    )
+
+    # ---------- AI_FILTER ----------
+    st.divider()
+    st.markdown("##### 1. AI_FILTER - filtrar filas con lenguaje natural")
+    st.caption(
+        "Devuelve TRUE/FALSE segun una condicion en lenguaje natural. "
+        "Reemplaza WHERE complicados por preguntas de negocio."
+    )
+    sql_filter_default = """SELECT file_name, sentimiento, LEFT(transcripcion, 200) AS preview
+FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES
+WHERE AI_FILTER(
+  PROMPT('La siguiente transcripcion describe a un cliente molesto o con un problema sin resolver: {0}', transcripcion)
+);"""
+    sql_filter = editable_sql("ai_filter", sql_filter_default, height=160)
+    if st.button("Ejecutar AI_FILTER", key="btn_filter", type="primary"):
+        df = safe_run(sql_filter, "Filtrando con AI...")
+        if df is not None:
+            st.dataframe(df, use_container_width=True, hide_index=True)
+
+    # ---------- AI_REDACT ----------
+    st.divider()
+    st.markdown("##### 2. AI_REDACT - anonimizar PII")
+    st.caption(
+        "Detecta y reemplaza datos personales (nombres, telefonos, correos, IDs) "
+        "directamente en SQL. Critico para gobernanza, compartir datos y compliance."
+    )
+    sql_redact_default = """SELECT
+  file_name,
+  AI_REDACT(LEFT(content, 1500), ['NAME', 'PHONE_NUMBER', 'EMAIL_ADDRESS', 'ADDRESS', 'ID_NUMBER']) AS contenido_anonimizado
+FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
+    sql_redact = editable_sql("ai_redact", sql_redact_default, height=140)
+    if st.button("Ejecutar AI_REDACT", key="btn_redact", type="primary"):
+        df = safe_run(sql_redact, "Anonimizando...")
+        if df is not None:
+            for _, row in df.iterrows():
+                with st.expander(f"{row['FILE_NAME']}", expanded=True):
+                    st.write(row["CONTENIDO_ANONIMIZADO"])
+
+    # ---------- AI_AGG ----------
+    st.divider()
+    st.markdown("##### 3. AI_AGG - resumir / razonar sobre muchas filas")
+    st.caption(
+        "Equivalente a SUM/AVG pero sobre texto: una instruccion en lenguaje natural "
+        "se aplica a todas las filas y devuelve un solo resultado consolidado."
+    )
+    sql_agg_default = """SELECT AI_AGG(
+  transcripcion,
+  'Eres un analista de calidad de servicio. Resume en espanol los temas comunes, las quejas mas frecuentes y las oportunidades de mejora detectadas en estas llamadas.'
+) AS resumen_consolidado
+FROM AI_SUMMIT.PUBLIC.TRANSCRIPCIONES;"""
+    sql_agg = editable_sql("ai_agg", sql_agg_default, height=160)
+    if st.button("Ejecutar AI_AGG", key="btn_agg", type="primary"):
+        df = safe_run(sql_agg, "Consolidando insights...")
+        if df is not None:
+            st.write(df.iloc[0]["RESUMEN_CONSOLIDADO"])
+
+    # ---------- AI_CLASSIFY ----------
+    st.divider()
+    st.markdown("##### 4. AI_CLASSIFY - clasificar texto en categorias")
+    st.caption(
+        "Asigna a cada texto la categoria mas adecuada de una lista que tu defines. "
+        "Sin entrenar modelos ni etiquetar datos."
+    )
+    sql_classify_default = """SELECT
+  file_name,
+  AI_CLASSIFY(
+    content,
+    ['contrato_vivienda', 'contrato_comercial', 'contrato_industrial', 'otro']
+  ):labels[0]::STRING AS tipo_contrato
+FROM AI_SUMMIT.PUBLIC.DOCS_PARSED;"""
+    sql_classify = editable_sql("ai_classify", sql_classify_default, height=160)
+    if st.button("Ejecutar AI_CLASSIFY", key="btn_classify", type="primary"):
+        df = safe_run(sql_classify, "Clasificando...")
+        if df is not None:
+            st.dataframe(df, use_container_width=True, hide_index=True)
+
+    # ---------- Tabla de mas funciones ----------
+    st.divider()
+    st.markdown("##### Y muchas mas funciones AI en SQL")
+    st.markdown(
+        "Snowflake Cortex incluye una libreria amplia. Estas son las que **no** "
+        "viste en el workshop, todas invocables como una funcion SQL mas."
+    )
+    mas_funciones = [
+        ("AI_COMPLETE", "Llamada generica a un LLM (Claude, GPT, Llama, Mistral). Texto e imagenes."),
+        ("AI_EXTRACT", "Extrae campos estructurados desde texto, imagenes o documentos."),
+        ("AI_SENTIMENT", "Mide sentimiento (positivo/negativo/mixto) de un texto."),
+        ("AI_TRANSCRIBE", "Transcribe audio y video a texto, con timestamps y speaker diarization."),
+        ("AI_PARSE_DOCUMENT", "OCR + layout: extrae texto e imagenes de PDFs, DOCX, PPTX y mas."),
+        ("AI_TRANSLATE", "Traduce entre idiomas soportados, en SQL."),
+        ("AI_SUMMARIZE_AGG", "Resume una columna de texto a traves de muchas filas (sin limites de contexto)."),
+        ("AI_EMBED", "Genera embeddings vectoriales para busqueda semantica y clustering."),
+        ("AI_SIMILARITY", "Calcula similitud entre dos textos o imagenes (cosine/dot)."),
+        ("AI_COUNT_TOKENS", "Cuenta tokens antes de una llamada para estimar costo."),
+        ("PROMPT", "Helper para construir prompts dinamicos con columnas y archivos."),
+        ("TO_FILE", "Crea una referencia a un archivo en stage para usar con AI_COMPLETE multimodal."),
+        ("TRY_COMPLETE", "Como AI_COMPLETE pero devuelve NULL en error en vez de fallar el query."),
+    ]
+    import pandas as _pd
+    df_funcs = _pd.DataFrame(mas_funciones, columns=["Funcion", "Que hace"])
+    st.dataframe(df_funcs, use_container_width=True, hide_index=True)
+
+    st.info(
+        "**Insight competitivo:** todas estas funciones son **SQL plano** - no hay "
+        "infraestructura, ni notebooks, ni mover datos. **Imagina procesar** filtros "
+        "inteligentes, anonimizacion masiva, clasificacion de documentos y "
+        "resumenes de miles de llamadas en una sola consulta."
     )
